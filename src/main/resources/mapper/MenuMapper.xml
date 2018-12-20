@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.jade.rjzxjjh.mapper.MenuMapper">
+    <resultMap id="BaseResultMap" type="cn.jade.rjzxjjh.model.Menu">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="level" property="level" jdbcType="INTEGER"/>
+        <result column="authority" property="authority" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="method" property="method" jdbcType="VARCHAR"/>
+        <result column="menu_type" property="menuType" jdbcType="VARCHAR"/>
+        <result column="visible" property="visible" jdbcType="VARCHAR"/>
+        <result column="pid" property="pid" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        m.id, m.name, m.level, m.authority, m.description, m.url, m.pid, m.method, m.menu_type, m.visible
+    </sql>
+
+    <insert id="insert" parameterType="cn.jade.rjzxjjh.model.Menu">
+        INSERT INTO sys_menu(`name`, `level`, authority, description, url, pid, method, menu_type, visible)
+        VALUES (#{name}, #{level}, #{authority}, #{description}, #{url}, #{pid}, #{method}, #{menuType}, #{visible})
+    </insert>
+
+    <update id="update" parameterType="string">
+        UPDATE bigdas_sequence_menuid
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="level != null">
+                level = #{level},
+            </if>
+            <if test="authority != null and authority != ''">
+                authority = #{authority},
+            </if>
+            <if test="description != null and description != ''">
+                description = #{description},
+            </if>
+            <if test="url != null and url != ''">
+                url = #{url},
+            </if>
+            <if test="pid != null and pid != ''">
+                pid = #{pid},
+            </if>
+            <if test="method != null and method != ''">
+                method = #{method},
+            </if>
+            <if test="menuType != null and menuType != ''">
+                menu_type = #{menuType},
+            </if>
+            <if test="visible != null and visible != ''">
+                visible = #{visible},
+            </if>
+        </set>
+        WHERE id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="cn.jade.rjzxjjh.model.Menu">
+        DELETE FROM sys_menu WHERE id=#{id}
+    </delete>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> from sys_menu m ORDER BY authority
+    </select>
+
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> from sys_menu m WHERE id=#{id}
+    </select>
+
+    <select id="selectByPidAndName" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> from sys_menu m WHERE pid=#{pid} AND name=#{name}
+    </select>
+
+    <select id="selectByAuthority" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> from sys_menu m WHERE authority=#{authority}
+    </select>
+
+    <select id="findByUserId" parameterType="int" resultMap="BaseResultMap">
+        select DISTINCT <include refid="Base_Column_List"/>
+        from sys_user u
+        LEFT JOIN sys_role_user ru on u.id= ru.user_id
+        LEFT JOIN sys_role r on ru.role_id=r.id
+        LEFT JOIN sys_menu_role mr on mr.role_id=r.id
+        LEFT JOIN sys_menu m on m.id = mr.menu_id
+        where u.id=#{userId}
+    </select>
+<!--
+    <insert id="initSequenceMenuId" parameterType="string">
+        INSERT INTO bigdas_sequence_menuid(pid) VALUE(#{pid})
+    </insert>
+
+    <update id="updateSequenceMenuId" parameterType="string">
+        UPDATE bigdas_sequence_menuid SET id=id+1 WHERE pid=#{pid}
+    </update>
+
+    <select id="getSequenceMenuId" resultType="string" parameterType="string">
+        SELECT get_menu_id(#{pid})
+    </select>
+
+    <select id="selectCountByPid" resultType="integer" parameterType="string">
+        SELECT COUNT(*) FROM sys_menu WHERE pid=#{pid}
+    </select>-->
+</mapper>

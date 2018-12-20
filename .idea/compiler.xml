@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="bdas" />
+        <module name="rj365zxjjh" />
+        <module name="rjrecp" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="bdas" target="1.6" />
+      <module name="rj365zxjjh" target="1.7" />
+      <module name="rjrecp" target="1.6" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.jade.rjzxjjh.mapper.RoleMapper">
+    <resultMap id="BaseResultMap" type="cn.jade.rjzxjjh.model.Role">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="createDate" property="createDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        r.id, r.name, r.description, r.createDate
+    </sql>
+
+    <select id="select" resultMap="BaseResultMap"  resultType="cn.jade.rjzxjjh.model.Role">
+        SELECT <include refid="Base_Column_List"/> from sys_role r where r.id = #{id}
+    </select>
+
+    <select id="getByRolename" resultType="cn.jade.rjzxjjh.model.Role">
+        SELECT <include refid="Base_Column_List"/> from sys_role r where r.name = #{name}
+    </select>
+
+    <select id="findList"  resultType="cn.jade.rjzxjjh.model.Role">
+        SELECT <include refid="Base_Column_List"/> from sys_role r
+    </select>
+
+    <select id="findPage"  resultType="cn.jade.rjzxjjh.model.Role">
+        SELECT <include refid="Base_Column_List"/>, COUNT(u.id) as 'userCount', COUNT(m.id) as 'menuCount' FROM sys_role r
+            LEFT JOIN sys_role_user ru ON r.id=ru.role_id
+            LEFT JOIN sys_user u ON ru.user_id=u.id
+            LEFT JOIN sys_menu_role mr ON r.id=mr.role_id
+            LEFT JOIN sys_menu m ON mr.menu_id=m.id
+            GROUP BY r.name
+        <if test="page != null">
+            limit #{page.currentPage}, #{page.pageSize}
+        </if>
+    </select>
+
+    <select id="findByUserId" parameterType="int" resultType="cn.jade.rjzxjjh.model.Role">
+        select DISTINCT r.id, r.name, r.description
+        from sys_user u
+        LEFT JOIN sys_role_user ru on u.id = ru.user_id
+        LEFT JOIN sys_role r on ru.role_id=r.id
+        where u.id=#{userId}
+    </select>
+
+    <select id="getCount" resultType="java.lang.Long" parameterType="cn.jade.rjzxjjh.model.Role">
+        SELECT COUNT(*) FROM sys_role r
+        <where>
+            <if test="name != null and name != ''">
+                r.name LIKE CONCAT('%', #{name}, '%') OR r.description LIKE CONCAT('%', #{name}, '%')
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteUserRole">
+        DELETE FROM sys_role_user WHERE role_id=#{roleId}
+    </delete>
+    <delete id="delete">
+        DELETE FROM sys_role WHERE id = #{roleId}
+    </delete>
+
+    <insert id="insert" parameterType="cn.jade.rjzxjjh.model.Role">
+        INSERT INTO sys_role(`name`, `description`) VALUES(#{name}, #{description})
+    </insert>
+    <update id="update" parameterType="cn.jade.rjzxjjh.model.Role">
+        UPDATE sys_role SET `name`=#{name}, description=#{description} WHERE id=#{id}
+    </update>
+</mapper>

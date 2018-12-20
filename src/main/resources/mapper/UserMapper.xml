@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.jade.rjzxjjh.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="cn.jade.rjzxjjh.model.User">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="nickname" property="nickname" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="update_date" property="updateDate" jdbcType="TIMESTAMP"/>
+        <result column="last_login_at" property="lastLoginAt" jdbcType="TIMESTAMP"/>
+        <result column="enabled" property="enabled" jdbcType="TINYINT"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="telephone" property="telephone" jdbcType="VARCHAR"/>
+
+        <collection property="role" ofType="cn.jade.rjzxjjh.model.Role">
+            <result column="name" property="name"/>
+            <result column="description" property="description"/>
+        </collection>
+    </resultMap>
+    <sql id="Base_Column_List">
+        u.id,u.username,u.nickname,u.password,u.create_date,u.update_date,u.enabled,u.email,u.telephone,u.last_login_at
+    </sql>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>, r.id, r.name, r.description
+        FROM sys_user u
+        LEFT JOIN sys_role_user sru on u.id= sru.user_id
+        LEFT JOIN sys_role r on sru.role_id=r.id
+    </select>
+
+    <select id="findList" resultMap="BaseResultMap" parameterType="cn.jade.rjzxjjh.model.User">
+        SELECT <include refid="Base_Column_List"/>, r.id, r.name, r.description
+        FROM sys_user u
+        LEFT JOIN sys_role_user sru on u.id= sru.user_id
+        LEFT JOIN sys_role r on sru.role_id=r.id
+        <if test="username != null and username != ''">
+            WHERE u.username LIKE CONCAT('%', #{username}, '%') OR u.nickname LIKE CONCAT('%', #{username}, '%')
+        </if>
+        <if test="page != null">
+            limit #{page.currentPage}, #{page.pageSize}
+        </if>
+    </select>
+
+    <select id="getCount" resultType="java.lang.Long" parameterType="cn.jade.rjzxjjh.model.User">
+        SELECT COUNT(*) FROM sys_user u
+        <if test="username != null and username != ''">
+            WHERE u.username LIKE CONCAT('%', #{username}, '%') OR u.nickname LIKE CONCAT('%', #{username}, '%')
+        </if>
+    </select>
+
+    <select id="findByUserName" resultMap="BaseResultMap" parameterType="cn.jade.rjzxjjh.model.User">
+        SELECT <include refid="Base_Column_List"/>, r.id, r.name, r.description
+        FROM sys_user u
+        LEFT JOIN sys_role_user sru on u.id= sru.user_id
+        LEFT JOIN sys_role r on sru.role_id=r.id
+        where username= #{username}
+    </select>
+
+    <select id="findByUserNameAndPwd" resultMap="BaseResultMap" parameterType="cn.jade.rjzxjjh.model.User">
+        SELECT <include refid="Base_Column_List"/>
+        FROM sys_user u
+        WHERE username = #{username} AND password = #{password}
+    </select>
+
+    <update id="update" parameterType="cn.jade.rjzxjjh.model.User">
+        UPDATE sys_user
+        <set>
+            <if test="username != null and username != ''">
+                username = #{username},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="updateDate != null and updateDate != ''">
+                update_date = #{updateDate},
+            </if>
+            <if test="lastLoginAt != null and lastLoginAt != ''">
+                last_login_at = #{lastLoginAt},
+            </if>
+            <if test="enabled != null and enabled != ''">
+                enabled = #{enabled},
+            </if>
+            <if test="nickname != null and nickname != ''">
+                nickname = #{nickname},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="telephone != null and telephone != ''">
+                telephone = #{telephone},
+            </if>
+        </set>
+        WHERE id= #{id}
+    </update>
+
+    <insert id="setUserRole" parameterType="cn.jade.rjzxjjh.model.User">
+        INSERT INTO sys_role_user(role_id, user_id) VALUES (#{role.id}, #{id})
+    </insert>
+
+    <update id="updateRoleByUserId" parameterType="cn.jade.rjzxjjh.model.User">
+        UPDATE sys_role_user SET role_id = #{role.id}
+        WHERE user_id= #{id}
+    </update>
+
+    <insert id="insert" parameterType="cn.jade.rjzxjjh.model.User">
+        INSERT INTO sys_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="username != null">
+                username,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="updateDate != null">
+                update_date,
+            </if>
+            <if test="lastLoginAt != null">
+                last_login_at,
+            </if>
+            <if test="enabled != null">
+                enabled,
+            </if>
+            <if test="nickname != null">
+                nickname,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="telephone != null">
+                telephone,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="username != null">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastLoginAt != null">
+                #{lastLoginAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="enabled != null">
+                #{enabled,jdbcType=TINYINT},
+            </if>
+            <if test="nickname != null">
+                #{nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="telephone != null">
+                #{telephone,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="deleteUserRole">
+        DELETE FROM sys_role_user WHERE user_id=#{userId}
+    </delete>
+    <delete id="delete">
+        DELETE FROM sys_user WHERE id = #{userId}
+    </delete>
+    <update id="forbidden">
+        UPDATE sys_user set enabled = ABS(enabled-1) WHERE id = #{userId}
+    </update>
+</mapper>

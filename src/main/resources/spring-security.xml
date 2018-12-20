@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+              http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+              http://www.springframework.org/schema/security
+              http://www.springframework.org/schema/security/spring-security-4.2.xsd ">
+
+    <!-- 不需要进行安全认证的资源 -->
+    <http pattern="/static/**" security="none" />
+    <http pattern="/rest/**" security="none" />
+    <http pattern="${rootPath}/loginPage" security="none" />
+    <http pattern="${rootPath}/user/toRegeditUser" security="none" />
+    <http pattern="${rootPath}/user/getByUsername" security="none" />
+    <http pattern="${rootPath}/user/regeditUser" security="none" />
+    <http pattern="${rootPath}/index1" security="none" />
+
+    <!-- 资源所需要的权限 -->
+    <http use-expressions="true" auto-config="true">
+        <!--<intercept-url pattern="${rootPath}/main" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN')"/>-->
+        <intercept-url pattern="${rootPath}/**" access="isAuthenticated()"/>
+
+        <!-- 自定义登录界面配置 -->
+        <!-- 配置登录处理器、登录成功后跳转URL、登录失败后跳转URL、登录处理地址、使用的用户名和密码input的name -->
+        <form-login login-page="${rootPath}/loginPage"
+                    default-target-url="${rootPath}/main"
+                    always-use-default-target="true"
+                    authentication-failure-url="${rootPath}/loginPage?error"
+                    login-processing-url="${rootPath}/login"
+                    username-parameter="username"
+                    password-parameter="password" />
+
+        <!-- 配置注销成功后跳转URL和注销处理地址 -->
+        <logout logout-success-url="${rootPath}/loginPage?logout"
+                logout-url="/logout" invalidate-session="true" />
+
+        <headers>
+            <frame-options policy="SAMEORIGIN"></frame-options>
+        </headers>
+
+
+        <!-- 启用 csrf 保护 -->
+        <csrf disabled="true"/>
+    </http>
+
+    <!--springsecurity-->
+    <!--项目实现的用户查询服务-->
+    <beans:bean id="userService" class="cn.jade.rjzxjjh.service.UserService" />
+    <beans:bean id="loginAuthenticationProvider" class="cn.jade.rjzxjjh.security.LoginAuthenticationProvider">
+        <beans:property name="userService" ref="userService"></beans:property>
+    </beans:bean>
+    <authentication-manager alias="myAuthenticationManager">
+        <authentication-provider ref="loginAuthenticationProvider">
+        </authentication-provider>
+    </authentication-manager>
+</beans:beans>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.1.xsd
+		">
+
+    <!-- 加载配置文件 -->
+    <context:property-placeholder ignore-unresolvable="true" location="classpath:config.properties" />
+
+    <!-- 将controller交给spring管理 -->
+    <context:component-scan base-package="cn.jade.rjzxjjh.controller"></context:component-scan>
+
+    <!-- 生成适配器，管理器 -->
+    <mvc:annotation-driven></mvc:annotation-driven>
+
+    <!-- 视图解析器 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/page/"></property>
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+
+    <!-- 对静态资源文件的访问， 将无法mapping到Controller的path交给default servlet handler处理 -->
+    <mvc:default-servlet-handler />
+
+    <!-- 静态资源文件 -->
+    <mvc:resources mapping="/static/**" location="/static/"/>
+
+     <!-- 配置参数类型 -->
+    <bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+        <property name="favorPathExtension" value="false"/>
+        <property name="favorParameter" value="false"/>
+        <property name="ignoreAcceptHeader" value="false"/>
+        <property name="mediaTypes">
+            <value>
+                atom=application/atom+xml
+                html=text/html
+                json=application/json
+                *=*/*
+            </value>
+        </property>
+    </bean>
+
+    <!-- 定义无Controller的path<->view直接映射 -->
+    <mvc:view-controller path="/" view-name="redirect:${rootPath}/main"/>
+    <mvc:view-controller path="${rootPath}" view-name="redirect:${rootPath}/main"/>
+
+<!--
+    <bean id="solrUtils" class="cn.jade.rjzxjjh.utils.solr.SolrUtils">
+        <constructor-arg index="0" value="${SOLR_URL}" />
+    </bean>-->
+
+    <!-- 拦截器配置，拦截顺序：先执行后定义的，排在第一位的最后执行。-->
+    <!--<mvc:interceptors>
+        <mvc:interceptor>
+            &lt;!&ndash; 需拦截的地址 &ndash;&gt;
+            &lt;!&ndash; 一级目录 &ndash;&gt;
+            <mvc:mapping path="/**" />
+            &lt;!&ndash; 需排除拦截的地址 &ndash;&gt;
+            <mvc:exclude-mapping path="/" />
+            <mvc:exclude-mapping path="/login" />
+            <mvc:exclude-mapping path="/rest/**" />
+            <mvc:exclude-mapping path="/regeditUser" />
+            <mvc:exclude-mapping path="/updatepwd" />
+            <mvc:exclude-mapping path="/index" />
+            <mvc:exclude-mapping path="/j_spring_security_check" />
+            <bean class="cn.jade.rjzxjjh.interceptor.LoginInterceptor" />
+        </mvc:interceptor>
+    </mvc:interceptors>-->
+</beans>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.jade.rjzxjjh.mapper.DictMapper">
+    <resultMap id="BaseResultMap" type="cn.jade.rjzxjjh.model.Dict">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="dict_type" property="dictType" jdbcType="VARCHAR"/>
+        <result column="dict_name" property="dictName" jdbcType="VARCHAR"/>
+        <result column="dict_index" property="dictIndex" jdbcType="VARCHAR"/>
+        <result column="dict_value" property="dictValue" jdbcType="VARCHAR"/>
+        <result column="dict_description" property="dictDescription" jdbcType="VARCHAR"/>
+        <result column="visibled" property="visibled" jdbcType="TINYINT"/>
+        <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
+        <result column="update_date" property="createDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        d.id, d.dict_type, d.dict_name, d.dict_index, d.dict_value, d.dict_description, d.visibled, d.create_user, d.create_date, d.update_user, d.update_date
+    </sql>
+
+    <select id="selectByType" resultMap="BaseResultMap"  resultType="cn.jade.rjzxjjh.model.Dict">
+        SELECT <include refid="Base_Column_List"/> from sys_dict d where d.dict_type = #{dictType} order by d.dict_index
+        <if test="page != null">
+            limit #{page.currentPage}, #{page.pageSize}
+        </if>
+    </select>
+
+    <select id="selectByTypeIndex" resultMap="BaseResultMap" parameterType="cn.jade.rjzxjjh.model.Dict">
+        SELECT <include refid="Base_Column_List"/> from sys_dict d where d.dict_type = #{dictType} AND d.dict_index=#{dictIndex}
+    </select>
+
+    <select id="findList" resultMap="BaseResultMap" parameterType="cn.jade.rjzxjjh.model.Dict">
+        SELECT <include refid="Base_Column_List"/> from sys_dict d order by d.dict_type, d.dict_index
+        <if test="page != null">
+            limit #{page.currentPage}, #{page.pageSize}
+        </if>
+    </select>
+
+    <select id="getCount" resultType="java.lang.Long" parameterType="cn.jade.rjzxjjh.model.Dict">
+        SELECT COUNT(*) FROM sys_dict d
+        <where>
+            <if test="dictType != null and dictType != ''">
+                d.dict_type = #{dictType}
+            </if>
+        </where>
+    </select>
+
+    <delete id="delete" parameterType="cn.jade.rjzxjjh.model.Dict">
+        DELETE FROM sys_dict WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteType" parameterType="cn.jade.rjzxjjh.model.Dict">
+        DELETE FROM sys_dict WHERE dict_type = #{dictType}
+    </delete>
+
+    <insert id="insert" parameterType="cn.jade.rjzxjjh.model.Dict">
+        INSERT INTO sys_dict(dict_type, dict_name, dict_index, dict_value, dict_description, visibled)
+            VALUES(#{dictType}, #{dictName}, #{dictIndex}, #{dictValue}, #{dictDescription}, #{visibled}, #{create_user})
+    </insert>
+
+    <update id="update" parameterType="cn.jade.rjzxjjh.model.Dict">
+        UPDATE sys_dict
+        <set>
+            <if test="dictType != null and dictType != ''">
+                dict_type = #{dictType},
+            </if>
+            <if test="dictName != null and dictName != ''">
+                dict_name = #{dictName},
+            </if>
+            <if test="dictIndex != null and dictIndex != ''">
+                dict_index = #{dictIndex},
+            </if>
+            <if test="dictValue != null and dictValue != ''">
+                dict_value = #{dictValue},
+            </if>
+            <if test="dictDescription != null and dictDescription != ''">
+                dict_description = #{dictDescription},
+            </if>
+            <if test="visibled != null and visibled != ''">
+                visibled = #{visibled},
+            </if>
+        </set>
+        WHERE id=#{id}
+    </update>
+</mapper>
