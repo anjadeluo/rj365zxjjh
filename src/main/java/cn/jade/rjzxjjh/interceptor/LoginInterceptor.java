@@ -26,7 +26,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     private static final ThreadLocal<Long> startTimeThreadLocal = new NamedThreadLocal<Long>("ThreadLocal StartTime");
 
-    private static final String ROOT = "/bigdas/";
+    private static final String ROOT = "/rj365zxjjh/";
     private static final String STATIC_URL = "/static/";
     private static final String login = "login";
     private static final String rest = "/rest/";

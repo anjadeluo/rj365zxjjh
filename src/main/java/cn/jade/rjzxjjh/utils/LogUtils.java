@@ -14,7 +14,7 @@ import java.util.Enumeration;
  */
 public class LogUtils {
 
-	public static final String ADMIN_PATH = "bigdas"; //后台访问地址
+	public static final String ADMIN_PATH = "rj365zxjjh"; //后台访问地址
 
 //	private static LogMapper logDao = SpringContextHolder.getBean(LogMapper.class);
 
