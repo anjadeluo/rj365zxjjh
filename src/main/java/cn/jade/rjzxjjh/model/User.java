@@ -122,22 +122,6 @@ public class User extends BasicModel<User> implements UserDetails {
         this.lastLoginAt = lastLoginAt;
     }
 
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public Date getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
-    }
-
     public String getNickname() {
         return nickname;
     }

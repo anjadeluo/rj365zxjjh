@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.jade.rjzxjjh.mapper.StudentMapper">
+  <resultMap id="BaseResultMap" type="cn.jade.rjzxjjh.model.Student">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="id_card_number" jdbcType="VARCHAR" property="idCardNumber" />
+    <result column="id_card_start_date" jdbcType="DATE" property="idCardStartDate" />
+    <result column="id_card_end_date" jdbcType="DATE" property="idCardEndDate" />
+    <result column="nation" jdbcType="INTEGER" property="nation" />
+    <result column="announce_type" jdbcType="INTEGER" property="announceType" />
+    <result column="native_place" jdbcType="VARCHAR" property="nativePlace" />
+    <result column="announce_address" jdbcType="VARCHAR" property="announceAddress" />
+    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="weixin_number" jdbcType="VARCHAR" property="weixinNumber" />
+    <result column="qq_number" jdbcType="VARCHAR" property="qqNumber" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="mail_number" jdbcType="VARCHAR" property="mailNumber" />
+    <result column="relat_address" jdbcType="VARCHAR" property="relatAddress" />
+    <result column="home_address" jdbcType="VARCHAR" property="homeAddress" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="create_date" jdbcType="DATE" property="createDate" />
+    <result column="update_date" jdbcType="DATE" property="updateDate" />
+    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+    <result column="update_reason" jdbcType="VARCHAR" property="updateReason" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+
+    <!--银行账户信息-->
+    <association property="studentBankInfo" javaType="cn.jade.rjzxjjh.model.StudentBankInfo">
+      <id property="id" column="b_id"/>
+      <result property="studentId" column="b_student_id"/>
+      <result property="bankName" column="b_bank_name"/>
+      <result property="bankUserName" column="b_bank_user_name"/>
+      <result property="bankCardId" column="b_bank_card_id"/>
+      <result property="description" column="b_description"/>
+    </association>
+
+    <!--监护人信息-->
+    <collection property="studentGuardianList" ofType="cn.jade.rjzxjjh.model.StudentGuardian">
+      <id column="g_id" property="id" jdbcType="INTEGER" />
+      <result column="g_name" property="name"/>
+      <result column="g_relation" property="relation"/>
+      <result column="g_student_id" property="studentId"/>
+      <result column="g_age" property="age"/>
+      <result column="g_id_card_number" property="idCardNumber"/>
+      <result column="g_phone_number" property="phoneNumber"/>
+      <result column="g_weixin_number" property="weixinNumber"/>
+      <result column="g_qq_number" property="qqNumber"/>
+      <result column="g_email" property="email"/>
+      <result column="g_workspace" property="workspace"/>
+      <result column="g_relat_address" property="relatAddress"/>
+    </collection>
+
+    <!--就学信息-->
+    <collection property="studentSchoolInfoList" ofType="cn.jade.rjzxjjh.model.StudentSchoolInfo">
+      <id column="s_id" property="id" jdbcType="INTEGER" />
+      <result column="s_student_id" property="studentId"/>
+      <result column="s_school_name" property="schoolName"/>
+      <result column="s_college_name" property="collegeName"/>
+      <result column="s_academic_class" property="academicClass"/>
+      <result column="s_grade" property="grade"/>
+      <result column="s_school_class" property="schoolClass"/>
+      <result column="s_class_teacher_name" property="classTeacherName"/>
+      <result column="s_class_teacher_sex" property="classTeacherSex"/>
+      <result column="s_class_teacher_phone" property="classTeacherPhone"/>
+      <result column="s_class_teacher_weixin" property="classTeacherWeixin"/>
+      <result column="s_school_address" property="schoolAddress"/>
+    </collection>
+  </resultMap>
+  <sql id="Base_Column_List">
+    a.id, a.name, a.sex, a.age, a.id_card_number, a.id_card_start_date, a.id_card_end_date, a.nation,
+    a.announce_type, a.native_place, a.announce_address, a.phone_number, a.weixin_number, a.qq_number,
+    a.email, a.mail_number, a.relat_address, a.home_address, a.username, a.create_date, a.update_date,
+    a.update_user, a.update_reason, a.remarks
+  </sql>
+  <sql id="Bank_Column_List">
+    b.id AS b_id, b.student_id AS b_student_id, b.bank_name AS b_bank_name, b.bank_user_name AS b_bank_user_name, b.bank_card_id AS b_bank_card_id, b.description AS b_description,
+    b.username AS b_username, b.create_date AS b_create_date, b.update_date AS b_update_date, b.update_user AS b_update_user, b.update_reason AS b_update_reason, b.remarks AS b_remarks
+  </sql>
+  <sql id="Guardian_Column_List">
+    g.id AS g_id, g.name AS g_name, g.relation AS g_relation, g.student_id AS g_student_id, g.age AS g_age, g.id_card_number AS g_id_card_number, g.phone_number AS g_phone_number,
+    g.weixin_number AS g_weixin_number, g.qq_number AS g_qq_number, g.email AS g_email, g.workspace AS g_workspace, g.relat_address AS g_relat_address, g.username AS g_username,
+    g.create_date AS g_create_date, g.update_date AS g_update_date, g.update_user AS g_update_user, g.update_reason AS g_update_reason, g.remarks AS g_remarks
+  </sql>
+  <sql id="SchoolInfo_Column_List">
+    s.id AS s_id, s.student_id AS s_student_id, s.school_name AS s_school_name, s.college_name AS s_college_name, s.academic_class AS s_academic_class, s.grade AS s_grade,
+    s.school_class AS s_school_class, s.class_teacher_name AS s_class_teacher_name, s.class_teacher_sex AS s_class_teacher_sex, s.class_teacher_phone AS s_class_teacher_phone,
+    s.class_teacher_weixin AS s_class_teacher_weixin, s.school_address AS s_school_address, s.username AS s_username, s.create_date AS s_create_date, s.update_date AS s_update_date,
+    s.update_user AS s_update_user, s.update_reason AS s_update_reason, s.remarks AS s_remarks
+  </sql>
+
+  <select id="getIdByUsername" parameterType="java.lang.String" resultType="java.lang.Integer">
+    SELECT id FROM student WHERE username=#{username}
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />, <include refid="Guardian_Column_List" />,
+            <include refid="SchoolInfo_Column_List" />, <include refid="Bank_Column_List" />
+    from student a LEFT JOIN student_guardian g ON a.id = g.student_id
+                   LEFT JOIN student_school_info s ON a.id = s.student_id
+                   LEFT JOIN student_bank_info b ON a.id = b.student_id
+    where a.id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />, <include refid="Guardian_Column_List" />,
+            <include refid="SchoolInfo_Column_List" />, <include refid="Bank_Column_List" />
+    from student a LEFT JOIN student_guardian g ON a.id = g.student_id
+                   LEFT JOIN student_school_info s ON a.id = s.student_id
+                   LEFT JOIN student_bank_info b ON a.id = b.student_id
+    where a.username = #{username,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from student where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="cn.jade.rjzxjjh.model.Student">
+    insert into student (id, name, sex,
+      age, id_card_number, id_card_start_date, 
+      id_card_end_date, nation, announce_type, 
+      native_place, announce_address, phone_number, 
+      weixin_number, qq_number, email, 
+      mail_number, relat_address, home_address, 
+      username, create_date, update_date, 
+      update_user, update_reason, remarks
+      )
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, 
+      #{age,jdbcType=INTEGER}, #{idCardNumber,jdbcType=VARCHAR}, #{idCardStartDate,jdbcType=DATE}, 
+      #{idCardEndDate,jdbcType=DATE}, #{nation,jdbcType=INTEGER}, #{announceType,jdbcType=INTEGER}, 
+      #{nativePlace,jdbcType=VARCHAR}, #{announceAddress,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR}, 
+      #{weixinNumber,jdbcType=VARCHAR}, #{qqNumber,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{mailNumber,jdbcType=VARCHAR}, #{relatAddress,jdbcType=VARCHAR}, #{homeAddress,jdbcType=VARCHAR}, 
+      #{username,jdbcType=VARCHAR}, #{createDate,jdbcType=DATE}, #{updateDate,jdbcType=DATE}, 
+      #{updateUser,jdbcType=VARCHAR}, #{updateReason,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.jade.rjzxjjh.model.Student">
+    insert into student
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="age != null">
+        age,
+      </if>
+      <if test="idCardNumber != null">
+        id_card_number,
+      </if>
+      <if test="idCardStartDate != null">
+        id_card_start_date,
+      </if>
+      <if test="idCardEndDate != null">
+        id_card_end_date,
+      </if>
+      <if test="nation != null">
+        nation,
+      </if>
+      <if test="announceType != null">
+        announce_type,
+      </if>
+      <if test="nativePlace != null">
+        native_place,
+      </if>
+      <if test="announceAddress != null">
+        announce_address,
+      </if>
+      <if test="phoneNumber != null">
+        phone_number,
+      </if>
+      <if test="weixinNumber != null">
+        weixin_number,
+      </if>
+      <if test="qqNumber != null">
+        qq_number,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="mailNumber != null">
+        mail_number,
+      </if>
+      <if test="relatAddress != null">
+        relat_address,
+      </if>
+      <if test="homeAddress != null">
+        home_address,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+      <if test="updateReason != null">
+        update_reason,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="idCardNumber != null">
+        #{idCardNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="idCardStartDate != null">
+        #{idCardStartDate,jdbcType=DATE},
+      </if>
+      <if test="idCardEndDate != null">
+        #{idCardEndDate,jdbcType=DATE},
+      </if>
+      <if test="nation != null">
+        #{nation,jdbcType=INTEGER},
+      </if>
+      <if test="announceType != null">
+        #{announceType,jdbcType=INTEGER},
+      </if>
+      <if test="nativePlace != null">
+        #{nativePlace,jdbcType=VARCHAR},
+      </if>
+      <if test="announceAddress != null">
+        #{announceAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="weixinNumber != null">
+        #{weixinNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="qqNumber != null">
+        #{qqNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="mailNumber != null">
+        #{mailNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="relatAddress != null">
+        #{relatAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="homeAddress != null">
+        #{homeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=DATE},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=DATE},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateReason != null">
+        #{updateReason,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.jade.rjzxjjh.model.Student">
+    update student
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="age != null">
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="idCardNumber != null">
+        id_card_number = #{idCardNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="idCardStartDate != null">
+        id_card_start_date = #{idCardStartDate,jdbcType=DATE},
+      </if>
+      <if test="idCardEndDate != null">
+        id_card_end_date = #{idCardEndDate,jdbcType=DATE},
+      </if>
+      <if test="nation != null">
+        nation = #{nation,jdbcType=INTEGER},
+      </if>
+      <if test="announceType != null">
+        announce_type = #{announceType,jdbcType=INTEGER},
+      </if>
+      <if test="nativePlace != null">
+        native_place = #{nativePlace,jdbcType=VARCHAR},
+      </if>
+      <if test="announceAddress != null">
+        announce_address = #{announceAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="weixinNumber != null">
+        weixin_number = #{weixinNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="qqNumber != null">
+        qq_number = #{qqNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="mailNumber != null">
+        mail_number = #{mailNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="relatAddress != null">
+        relat_address = #{relatAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="homeAddress != null">
+        home_address = #{homeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=DATE},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=DATE},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateReason != null">
+        update_reason = #{updateReason,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.jade.rjzxjjh.model.Student">
+    update student
+    set name = #{name,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=INTEGER},
+      age = #{age,jdbcType=INTEGER},
+      id_card_number = #{idCardNumber,jdbcType=VARCHAR},
+      id_card_start_date = #{idCardStartDate,jdbcType=DATE},
+      id_card_end_date = #{idCardEndDate,jdbcType=DATE},
+      nation = #{nation,jdbcType=INTEGER},
+      announce_type = #{announceType,jdbcType=INTEGER},
+      native_place = #{nativePlace,jdbcType=VARCHAR},
+      announce_address = #{announceAddress,jdbcType=VARCHAR},
+      phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      weixin_number = #{weixinNumber,jdbcType=VARCHAR},
+      qq_number = #{qqNumber,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      mail_number = #{mailNumber,jdbcType=VARCHAR},
+      relat_address = #{relatAddress,jdbcType=VARCHAR},
+      home_address = #{homeAddress,jdbcType=VARCHAR},
+      username = #{username,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=DATE},
+      update_date = #{updateDate,jdbcType=DATE},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_reason = #{updateReason,jdbcType=VARCHAR},
+      remarks = #{remarks,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

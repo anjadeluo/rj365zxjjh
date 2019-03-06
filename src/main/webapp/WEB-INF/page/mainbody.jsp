@@ -30,25 +30,25 @@
                     <a href="javascript:;" class="ue-clear"><i class="nav-ivon"></i><span class="nav-text">通用管理</span></a>
                     <ul class="subnav">
                         <li class="subnav-li current" href="${rootPath}/index" data-id="1"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">首页</span></a></li>
-                        <li class="subnav-li" href="table.html"  data-id="02"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">个人信息</span></a></li>
+                        <li class="subnav-li" href="${rootPath}/student/studentInfo"  data-id="02"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">个人信息</span></a></li>
                         <li class="subnav-li" href="table.html"  data-id="03"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">我的日志</span></a></li>
                         <li class="subnav-li" href="table.html" data-id="04"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">通知公告</span></a></li>
                         <li class="subnav-li" href="table.html" data-id="05"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">新闻资讯</span></a></li>
                     </ul>
                 </li>
                 </sec:authorize>
-                <sec:authorize access="hasAuthority('sys:funding')">
+                <sec:authorize access="hasAnyAuthority('sys:funding', 'ROLE_SUPER_ADMIN')">
                 <li class="nav-li">
                     <a href="javascript:;" class="ue-clear"><i class="nav-ivon"></i><span class="nav-text">助学管理</span></a>
                     <ul class="subnav">
-                    <sec:authorize access="hasAuthority('sys:funding:application')">
-                        <li class="subnav-li" href="table.html" data-id="11"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">助学申请</span></a></li>
+                    <sec:authorize access="hasAnyAuthority('sys:funding:application', 'ROLE_SUPER_ADMIN')">
+                        <li class="subnav-li" href="${rootPath}/funding/application" data-id="11"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">助学申请</span></a></li>
                     </sec:authorize>
-                    <sec:authorize access="hasAuthority('sys:funding:donation')">
-                        <li class="subnav-li" href="table.html" data-id="12"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">爱心捐赠</span></a></li>
+                    <sec:authorize access="hasAnyAuthority('sys:funding:donation', 'ROLE_SUPER_ADMIN')">
+                        <li class="subnav-li" href="${rootPath}/funding/donation" data-id="12"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">爱心捐赠</span></a></li>
                     </sec:authorize>
-                    <sec:authorize access="hasAuthority('sys:funding:approve')">
-                        <li class="subnav-li" href="table.html" data-id="13"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">审批管理</span></a></li>
+                    <sec:authorize access="hasAnyAuthority('sys:funding:approve', 'ROLE_SUPER_ADMIN')">
+                        <li class="subnav-li" href="${rootPath}/funding/approve" data-id="13"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">审批管理</span></a></li>
                     </sec:authorize>
                     </ul>
                 </li>

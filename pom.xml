@@ -415,7 +415,7 @@
                 <configuration>
                     <skipTests>true</skipTests>
                 </configuration>
-            </plugin>
+            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -428,9 +428,9 @@
                         <extdirs>src\main\webapp\WEB-INF\lib</extdirs>
                     </compilerArguments>
                 </configuration>
-            </plugin>-->
+            </plugin>
             <!--mybatis 插件-->
-            <!--<plugin>
+            <plugin>
                 <groupId>org.mybatis.generator</groupId>
                 <artifactId>mybatis-generator-maven-plugin</artifactId>
                 <version>1.3.2</version>
@@ -447,7 +447,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>-->
+            </plugin>
 
         </plugins>
     </build>

@@ -24,4 +24,4 @@
 <script type="text/javascript" src="${ctxStatic}/js/jquery.dialog.js"></script>
 <script type="text/javascript" src="${ctxStatic}/js/jquery.ztree.core-3.5.js"></script>
 <%--<link rel="icon" href="${ctxStatic}/images/yhlogo.png">--%>
-<script>var rootPath = "${rootPath}", ctxStatic = "${ctxStatic}", publicStatic = "${publicStatic}";</script>
+<script>var rootPath = "${rootPath}", ctx = "${ctx}", ctxStatic = "${ctxStatic}", publicStatic = "${publicStatic}";</script>

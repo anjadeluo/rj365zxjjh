@@ -4,60 +4,45 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-    <classPathEntry location="C:\\Users\\yhsk\\.m2\\repository\\mysql\\mysql-connector-java\\5.1.35\\mysql-connector-java-5.1.35.jar"/>
+    <classPathEntry location="C:\\myworkplace\\rj365zxjjh\\src\\main\\webapp\\WEB-INF\\lib\\mysql-connector-java-5.1.47.jar"/>
     
     <context id="zo" targetRuntime="MyBatis3">
-        <commentGenerator>
+        <!--<commentGenerator>
             <property name="suppressDate" value="false"/>
             <property name="suppressAllComments" value="false"/>
-        </commentGenerator>
+        </commentGenerator>-->
 
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://127.0.0.1:3306/rjrecp?useUnicode=true" userId="root"
-                        password="admin@123"/>
+                        connectionURL="jdbc:mysql://120.77.159.185:3306/rj365zxjjh?useUnicode=true" userId="root"
+                        password="root"/>
         <javaModelGenerator targetPackage="cn.jade.rjzxjjh.model" targetProject="src/test/java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
-        <sqlMapGenerator targetPackage="cn.jade.rjzxjjh.model" targetProject="src/test/java">
+        <sqlMapGenerator targetPackage="cn.jade.rjzxjjh.mapper" targetProject="src/test/java">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
-        <javaClientGenerator targetPackage="cn.jade.rjzxjjh.model" targetProject="src/test/java" type="XMLMAPPER">
+        <javaClientGenerator targetPackage="cn.jade.rjzxjjh.mapper" targetProject="src/test/java" type="XMLMAPPER">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
-        <table tableName="cart_info" domainObjectName="CartInfo"
+        <table tableName="student" domainObjectName="Student"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">
         </table>
-        <table tableName="goods_info" domainObjectName="GoodsInfo"
+        <table tableName="student_guardian" domainObjectName="StudentGuardian"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">
         </table>
-        <table tableName="goods_type" domainObjectName="GoodsType"
+        <table tableName="student_school_info" domainObjectName="StudentSchoolInfo"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">
         </table>
-        <table tableName="order_goods_info" domainObjectName="OrderGoodsInfo"
-               enableCountByExample="false" enableUpdateByExample="false"
-               enableDeleteByExample="false" enableSelectByExample="false"
-               selectByExampleQueryId="false">
-        </table>
-        <table tableName="order_info" domainObjectName="OrderInfo"
-               enableCountByExample="false" enableUpdateByExample="false"
-               enableDeleteByExample="false" enableSelectByExample="false"
-               selectByExampleQueryId="false">
-        </table>
-        <table tableName="order_status_info" domainObjectName="OrderStatusInfo"
-               enableCountByExample="false" enableUpdateByExample="false"
-               enableDeleteByExample="false" enableSelectByExample="false"
-               selectByExampleQueryId="false">
-        </table>
-        <table tableName="user_info" domainObjectName="UserInfo"
+        <table tableName="student_bank_info" domainObjectName="StudentBankInfo"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">
