@@ -46,7 +46,7 @@
                 </div>
                 <span class="label">身份证有效日期起始：</span>
                 <div class="fl">
-                    <input type="text" id="idCardStartDate" name="idCardStartDate" onfocus="WdatePicker()" value="${student.idCardStartDate}" class="text" tabindex="4"/>
+                    <input type="text" id="idCardStartDate" name="idCardStartDate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'idCardEndDate\')}'})" value="${student.idCardStartDate}" autocomplete="off" class="text Wdate" tabindex="4"/>
                     <label id="idCardStartDate_succeed" class="blank"></label>
                     <span class="clear"></span>
                     <div id="idCardStartDate_error"></div>
@@ -63,7 +63,7 @@
                 </div>
                 <span class="label">身份证有效日期结束：</span>
                 <div class="fl">
-                    <input type="text" id="idCardEndDate" name="idCardEndDate" onfocus="WdatePicker()" value="${student.idCardEndDate}" class="text" tabindex="6"/>
+                    <input type="text" id="idCardEndDate" name="idCardEndDate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'idCardStartDate\')}'})" value="${student.idCardEndDate}" autocomplete="off" class="text Wdate" tabindex="6"/>
                     <label id="idCardEndDate_succeed" class="blank"></label>
                     <span class="clear"></span>
                     <div id="idCardEndDate_error"></div>

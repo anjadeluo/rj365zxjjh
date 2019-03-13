@@ -119,7 +119,7 @@ public class StudentController extends BaseController{
         if (student == null) {
             operType = CommonConstant.STU_OPER.get(CommonConstant.STU_NEW_INFO);
         }
-
+        operType = CommonConstant.STU_OPER.get(CommonConstant.STU_EDIT_INFO);
         model.addAttribute("student", student);
         model.addAttribute("operType", StringUtils.isBlank(operType)? CommonConstant.STU_OPER.get(CommonConstant.STU_VIEW_INFO) : operType);
 
