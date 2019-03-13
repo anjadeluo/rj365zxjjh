@@ -7,6 +7,9 @@ import java.util.HashMap;
  */
 public class CommonConstant {
     public static final String TOOL_TYPE_OVERLAP = "overlap";
+    public static final String STU_VIEW_INFO = "VIEW_INFO";
+    public static final String STU_NEW_INFO = "NEW_INFO";
+    public static final String STU_EDIT_INFO = "EDIT_INFO";
 
     public static final HashMap ANALYSIS_TYPE = new HashMap(){
         {
@@ -15,6 +18,14 @@ public class CommonConstant {
             put("MIN", "最小值");
             put("AVG", "平均值");
             put("COUNT", "总数");
+        }
+    };
+
+    public static final HashMap<String, String> STU_OPER = new HashMap() {
+        {
+            put(STU_VIEW_INFO, "0");
+            put(STU_NEW_INFO, "1");
+            put(STU_EDIT_INFO, "2");
         }
     };
 

@@ -1,5 +1,6 @@
 package cn.jade.rjzxjjh.controller;
 
+import cn.jade.rjzxjjh.constant.CommonConstant;
 import cn.jade.rjzxjjh.model.Page;
 import cn.jade.rjzxjjh.model.Student;
 import cn.jade.rjzxjjh.service.StudentService;
@@ -21,7 +22,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("${rootPath}/student")
-public class StudentController {
+public class StudentController extends BaseController{
 
     private Logger logger = Logger.getLogger(UserController.class.getName());
 
@@ -107,7 +108,33 @@ public class StudentController {
      * @param response
      */
     @RequestMapping(value = "/studentInfo")
-    public String studentInfo(String studentId, Model model, HttpServletRequest request, HttpServletResponse response) {
+    public String studentInfo(String studentId, String operType, Model model, HttpServletRequest request, HttpServletResponse response) {
+        Student student = null;
+        if (StringUtils.isNotBlank(studentId)) {
+            student = studentService.select(Integer.parseInt(studentId));
+        } else {
+            student = studentService.selectByUsername(UserUtils.getCurrentUser().getUsername());
+        }
+
+        if (student == null) {
+            operType = CommonConstant.STU_OPER.get(CommonConstant.STU_NEW_INFO);
+        }
+
+        model.addAttribute("student", student);
+        model.addAttribute("operType", StringUtils.isBlank(operType)?"0":operType);
+
+        return "student/studentInfo";
+    }
+
+    /**
+     * 个人信息详情
+     *
+     * @param studentId
+     * @param request
+     * @param response
+     */
+    @RequestMapping(value = "/studentEdit")
+    public String studentEdit(String studentId, Model model, HttpServletRequest request, HttpServletResponse response) {
         Student student = null;
         if (StringUtils.isNotBlank(studentId)) {
             student = studentService.select(Integer.parseInt(studentId));
@@ -116,7 +143,7 @@ public class StudentController {
         }
         model.addAttribute("student", student);
 
-        return "student/studentInfo";
+        return "student/studentForm";
     }
 
     /**
@@ -133,6 +160,6 @@ public class StudentController {
 
         model.addAttribute("student", student);
 
-        return "student/studentInfo";
+        return "redirect:" + rootPath + "/student/studentInfo?studentId=" + student.getId();
     }
 }
