@@ -121,7 +121,7 @@ public class StudentController extends BaseController{
         }
 
         model.addAttribute("student", student);
-        model.addAttribute("operType", StringUtils.isBlank(operType)?"0":operType);
+        model.addAttribute("operType", StringUtils.isBlank(operType)? CommonConstant.STU_OPER.get(CommonConstant.STU_VIEW_INFO) : operType);
 
         return "student/studentInfo";
     }
