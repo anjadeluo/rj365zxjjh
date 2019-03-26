@@ -48,7 +48,7 @@
                             <span class="report" title="导出"></span>
                             <!--<span class="close" title="关闭"></span>-->
                         </span>
-                        <span class="title">待办事项</span>
+                        <span class="title">捐款信息</span>
                     </h2>
                     <div class="content-bd">
                         <ul class="content-list things">
@@ -83,7 +83,7 @@
                             <span class="report" title="导出"></span>
                             <!--<span class="close" title="关闭"></span>-->
                         </span>
-                        <span class="title">日程安排</span>
+                        <span class="title">助学信息</span>
                     </h2>
                     <div class="content-bd">
                         <ul class="content-list things">
@@ -119,7 +119,7 @@
                             <span class="report" title="导出"></span>
                             <!--<span class="close" title="关闭"></span>-->
                         </span>
-                        <span class="title">数据统计</span>
+                        <span class="title">受助学生统计</span>
                     </h2>
                     <div class="content-bd">
                         <img src="${ctxStatic}/img/skin_/pic2.png" height="100%" width="100%" />

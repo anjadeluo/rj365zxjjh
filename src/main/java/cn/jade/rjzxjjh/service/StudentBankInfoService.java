@@ -3,6 +3,7 @@ package cn.jade.rjzxjjh.service;
 import cn.jade.rjzxjjh.mapper.StudentBankInfoMapper;
 import cn.jade.rjzxjjh.model.Student;
 import cn.jade.rjzxjjh.model.StudentBankInfo;
+import cn.jade.rjzxjjh.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,10 @@ public class StudentBankInfoService {
 
     public int save(StudentBankInfo studentBankInfo) {
         int result = 0;
-        if (studentBankInfo.getId() != null) {
+        if (studentBankInfo.getId() != null || StringUtils.isNotBlank(studentBankInfo.getStrId())) {
+            if (studentBankInfo.getId() == null && StringUtils.isNotBlank(studentBankInfo.getStrId())) {
+                studentBankInfo.setId(Integer.parseInt(studentBankInfo.getStrId()));
+            }
             studentBankInfo.preUpdate();
             result = studentBankInfoMapper.updateByPrimaryKeySelective(studentBankInfo);
         } else {

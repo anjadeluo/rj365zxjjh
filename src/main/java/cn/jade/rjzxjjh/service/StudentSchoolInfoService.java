@@ -3,6 +3,7 @@ package cn.jade.rjzxjjh.service;
 import cn.jade.rjzxjjh.mapper.StudentSchoolInfoMapper;
 import cn.jade.rjzxjjh.model.Student;
 import cn.jade.rjzxjjh.model.StudentSchoolInfo;
+import cn.jade.rjzxjjh.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,10 @@ public class StudentSchoolInfoService {
 
     public int save(StudentSchoolInfo studentSchoolInfo) {
         int result = 0;
-        if (studentSchoolInfo.getId() != null) {
+        if (studentSchoolInfo.getId() != null || StringUtils.isNotBlank(studentSchoolInfo.getStrId())) {
+            if (studentSchoolInfo.getId() == null && StringUtils.isNotBlank(studentSchoolInfo.getStrId())) {
+                studentSchoolInfo.setId(Integer.parseInt(studentSchoolInfo.getStrId()));
+            }
             studentSchoolInfo.preUpdate();
             result = studentSchoolInfoMapper.updateByPrimaryKeySelective(studentSchoolInfo);
         } else {

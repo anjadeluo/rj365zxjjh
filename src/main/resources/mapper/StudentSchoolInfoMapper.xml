@@ -11,7 +11,7 @@
     <result column="student_id" jdbcType="INTEGER" property="studentId" />
     <result column="school_name" jdbcType="VARCHAR" property="schoolName" />
     <result column="college_name" jdbcType="VARCHAR" property="collegeName" />
-    <result column="academic_class" jdbcType="INTEGER" property="academicClass" />
+    <result column="academic_class" jdbcType="VARCHAR" property="academicClass" />
     <result column="grade" jdbcType="INTEGER" property="grade" />
     <result column="school_class" jdbcType="VARCHAR" property="schoolClass" />
     <result column="class_teacher_name" jdbcType="VARCHAR" property="classTeacherName" />
@@ -70,7 +70,7 @@
       update_date, update_user, update_reason, 
       remarks)
     values (#{id,jdbcType=INTEGER}, #{studentId,jdbcType=INTEGER}, #{schoolName,jdbcType=VARCHAR}, 
-      #{collegeName,jdbcType=VARCHAR}, #{academicClass,jdbcType=INTEGER}, #{grade,jdbcType=INTEGER}, 
+      #{collegeName,jdbcType=VARCHAR}, #{academicClass,jdbcType=VARCHAR}, #{grade,jdbcType=INTEGER},
       #{schoolClass,jdbcType=VARCHAR}, #{classTeacherName,jdbcType=VARCHAR}, #{classTeacherSex,jdbcType=INTEGER},
       #{classTeacherPhone,jdbcType=VARCHAR}, #{classTeacherWeixin,jdbcType=VARCHAR}, 
       #{schoolAddress,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{createDate,jdbcType=DATE}, 
@@ -154,7 +154,7 @@
         #{collegeName,jdbcType=VARCHAR},
       </if>
       <if test="academicClass != null">
-        #{academicClass,jdbcType=INTEGER},
+        #{academicClass,jdbcType=VARCHAR},
       </if>
       <if test="grade != null">
         #{grade,jdbcType=INTEGER},
@@ -215,7 +215,7 @@
         college_name = #{collegeName,jdbcType=VARCHAR},
       </if>
       <if test="academicClass != null">
-        academic_class = #{academicClass,jdbcType=INTEGER},
+        academic_class = #{academicClass,jdbcType=VARCHAR},
       </if>
       <if test="grade != null">
         grade = #{grade,jdbcType=INTEGER},
@@ -269,7 +269,7 @@
     set student_id = #{studentId,jdbcType=INTEGER},
       school_name = #{schoolName,jdbcType=VARCHAR},
       college_name = #{collegeName,jdbcType=VARCHAR},
-      academic_class = #{academicClass,jdbcType=INTEGER},
+      academic_class = #{academicClass,jdbcType=VARCHAR},
       grade = #{grade,jdbcType=INTEGER},
       school_class = #{schoolClass,jdbcType=VARCHAR},
       class_teacher_name = #{classTeacherName,jdbcType=VARCHAR},

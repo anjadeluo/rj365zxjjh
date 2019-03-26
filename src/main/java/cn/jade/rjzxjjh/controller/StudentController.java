@@ -1,8 +1,7 @@
 package cn.jade.rjzxjjh.controller;
 
 import cn.jade.rjzxjjh.constant.CommonConstant;
-import cn.jade.rjzxjjh.model.Page;
-import cn.jade.rjzxjjh.model.Student;
+import cn.jade.rjzxjjh.model.*;
 import cn.jade.rjzxjjh.service.StudentService;
 import cn.jade.rjzxjjh.utils.JsonUtils;
 import cn.jade.rjzxjjh.utils.ResponseResult;
@@ -12,13 +11,16 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("${rootPath}/student")
@@ -74,33 +76,6 @@ public class StudentController extends BaseController{
     }
 
     /**
-     * 查看学生信息
-     *
-     * @param student
-     * @param request
-     * @param response
-     */
-    @RequestMapping(value = "/editInfo")
-    @ResponseBody
-    public void editInfo(Student student, HttpServletRequest request, HttpServletResponse response) {
-        ResponseResult<Student> result = new ResponseResult();
-        try {
-            int rec = studentService.save(student);
-            if (rec > 0) {
-                result.setSuccess(true);
-            } else {
-                result.setSuccess(false);
-            }
-        } catch (Exception e) {
-            result.setSuccess(false);
-            result.setMessage("exception:" + e);
-            logger.error("exception:", e);
-        } finally {
-            JsonUtils.writeJson(result, request, response);
-        }
-    }
-
-    /**
      * 个人信息详情
      *
      * @param studentId
@@ -108,42 +83,22 @@ public class StudentController extends BaseController{
      * @param response
      */
     @RequestMapping(value = "/studentInfo")
-    public String studentInfo(String studentId, String operType, Model model, HttpServletRequest request, HttpServletResponse response) {
+    public String studentInfo(String studentId, Model model, HttpServletRequest request, HttpServletResponse response) {
         Student student = null;
+        String username = UserUtils.getCurrentUser().getUsername();
         if (StringUtils.isNotBlank(studentId)) {
             student = studentService.select(Integer.parseInt(studentId));
         } else {
-            student = studentService.selectByUsername(UserUtils.getCurrentUser().getUsername());
+            student = studentService.selectByUsername(username);
         }
-
-        if (student == null) {
-            operType = CommonConstant.STU_OPER.get(CommonConstant.STU_NEW_INFO);
+        if (student != null) {
+            StudentBankInfo studentBankInfo = studentService.selectBankInfo(student);
+            model.addAttribute("studentBankInfo", studentBankInfo);
         }
-        operType = CommonConstant.STU_OPER.get(CommonConstant.STU_EDIT_INFO);
         model.addAttribute("student", student);
-        model.addAttribute("operType", StringUtils.isBlank(operType)? CommonConstant.STU_OPER.get(CommonConstant.STU_VIEW_INFO) : operType);
+        model.addAttribute("username", username);
 
         return "student/studentInfo";
-    }
-
-    /**
-     * 个人信息详情
-     *
-     * @param studentId
-     * @param request
-     * @param response
-     */
-    @RequestMapping(value = "/studentEdit")
-    public String studentEdit(String studentId, Model model, HttpServletRequest request, HttpServletResponse response) {
-        Student student = null;
-        if (StringUtils.isNotBlank(studentId)) {
-            student = studentService.select(Integer.parseInt(studentId));
-        } else {
-            student = studentService.selectByUsername(UserUtils.getCurrentUser().getUsername());
-        }
-        model.addAttribute("student", student);
-
-        return "student/studentForm";
     }
 
     /**
@@ -154,12 +109,221 @@ public class StudentController extends BaseController{
      * @param response
      */
     @RequestMapping(value = "/saveStudent")
-    public String saveStudent(Student student, Model model, HttpServletRequest request, HttpServletResponse response) {
+    @ResponseBody
+    public Map<String, Object> saveStudent(@RequestBody Student student, HttpServletRequest request, HttpServletResponse response) {
+        Map<String, Object> map = new HashMap();
+        if (student == null) {
+            map.put("success", false);
+            map.put("msg", "提交信息不能为空！");
+            return map;
+        }
+        try {
+            Integer studentId = studentService.save(student);
+            map.put("success", true);
+            map.put("studentId", studentId);
+            map.put("msg", "保存成功！");
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("msg", "保存失败！");
+        }
+        return map;
+    }
 
-        int rec = studentService.save(student);
+    /**
+     * 删除信息
+     *
+     * @param id
+     * @param itemType
+     * @param request
+     * @param response
+     */
+    @RequestMapping(value = "/deleteItem")
+    @ResponseBody
+    public Map<String, Object> deleteItem(Integer id, String itemType, HttpServletRequest request, HttpServletResponse response) {
+        Map<String, Object> map = new HashMap();
+        if (id == null) {
+            map.put("success", false);
+            map.put("msg", "请选择要删除的数据");
+            return map;
+        }
+        if (!"SchoolInfo".equals(itemType) && !"Guardians".equals(itemType)) {
+            map.put("success", false);
+            map.put("msg", "删除的数据类型不对");
+            return map;
+        }
+        try {
+            studentService.delete(id, itemType);
+            map.put("success", true);
+            map.put("msg", "删除成功！");
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("msg", "删除失败！");
+        }
+        return map;
+    }
 
-        model.addAttribute("student", student);
+    /**
+     * 保存监护人信息
+     *
+     * @param guardian
+     * @param request
+     * @param response
+     */
+    @RequestMapping(value = "/saveStudentGuardian")
+    @ResponseBody
+    public Map<String, Object> saveStudentGuardian(@RequestBody StudentGuardian guardian, HttpServletRequest request, HttpServletResponse response) {
+        Map<String, Object> map = new HashMap();
+        if (guardian == null) {
+            map.put("success", false);
+            map.put("msg", "提交信息不能为空！");
+            return map;
+        }
+        if (guardian.getStudentId() == null) {
+            map.put("success", false);
+            map.put("msg", "请先填写基础信息！");
+            return map;
+        }
+        try {
+            studentService.save(guardian);
+            map.put("success", true);
+            map.put("msg", "保存成功！");
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("msg", "保存失败！");
+        }
+        return map;
+    }
 
-        return "redirect:" + rootPath + "/student/studentInfo?studentId=" + student.getId();
+    /**
+     * 保存就学信息
+     *
+     * @param schoolInfo
+     * @param request
+     * @param response
+     */
+    @RequestMapping(value = "/saveStudentSchool")
+    @ResponseBody
+    public Map<String, Object> saveStudentSchool(@RequestBody StudentSchoolInfo schoolInfo, HttpServletRequest request, HttpServletResponse response) {
+        Map<String, Object> map = new HashMap();
+        if (schoolInfo == null) {
+            map.put("success", false);
+            map.put("msg", "提交信息不能为空！");
+            return map;
+        }
+        if (schoolInfo.getStudentId() == null) {
+            map.put("success", false);
+            map.put("msg", "请先填写基础信息！");
+            return map;
+        }
+        try {
+            studentService.save(schoolInfo);
+            map.put("success", true);
+            map.put("msg", "保存成功！");
+        } catch (Exception e) {
+            map.put("success", false);
+            map.put("msg", "保存失败！");
+        }
+        return map;
+    }
+
+    /**
+     * 保存银行账户信息
+     *
+     * @param bankInfo
+     * @param request
+     * @param response
+     */
+    @RequestMapping(value = "/saveStudentBank")
+    @ResponseBody
+    public Map<String, Object> saveStudentBank(@RequestBody StudentBankInfo bankInfo, HttpServletRequest request, HttpServletResponse response) {
+        Map<String, Object> map = new HashMap();
+        if (bankInfo == null) {
+            map.put("success", false);
+            map.put("msg", "提交信息不能为空！");
+            return map;
+        }
+        if (bankInfo.getStudentId() == null) {
+            map.put("success", false);
+            map.put("msg", "请先填写基础信息！");
+            return map;
+        }
+        try {
+            studentService.save(bankInfo);
+            map.put("success", true);
+            map.put("msg", "保存成功！");
+        } catch (Exception e) {
+            map.put("success", false);
+            map.put("msg", "保存失败！");
+        }
+        return map;
+    }
+
+    /**
+     * 获取监护人列表信息
+     *
+     * @param studentId
+     * @param request
+     * @param response
+     */
+    @RequestMapping(value = "/getGuardianListData")
+    public void getGuardianListData(Integer studentId, HttpServletRequest request, HttpServletResponse response) {
+        ResponseResult<List<StudentGuardian>> result = new ResponseResult<List<StudentGuardian>>();
+        try {
+            List<StudentGuardian> studentGuardianList = studentService.selectGuardian(studentId);
+            result.setSuccess(true);
+            result.setData(studentGuardianList);
+        } catch (Exception e) {
+            result.setSuccess(false);
+            result.setMessage("exception:" + e);
+            logger.error("exception:", e);
+        }
+        JsonUtils.writeJson(result, request, response);
+    }
+
+    /**
+     * 获取就学信息列表
+     *
+     * @param studentId
+     * @param request
+     * @param response
+     */
+    @RequestMapping(value = "/getSchoolListData")
+    public void getSchoolListData(Integer studentId, HttpServletRequest request, HttpServletResponse response) {
+        ResponseResult<List<StudentSchoolInfo>> result = new ResponseResult<List<StudentSchoolInfo>>();
+        try {
+            List<StudentSchoolInfo> studentSchoolInfoList = studentService.selectSchoolInfo(studentId);
+            result.setSuccess(true);
+            result.setData(studentSchoolInfoList);
+        } catch (Exception e) {
+            result.setSuccess(false);
+            result.setMessage("exception:" + e);
+            logger.error("exception:", e);
+        }
+        JsonUtils.writeJson(result, request, response);
+    }
+
+    /**
+     * 获取就学信息列表
+     *
+     * @param studentId
+     * @param request
+     * @param response
+     */
+    @RequestMapping(value = "/getBankData")
+    public void getBankData(Integer studentId, HttpServletRequest request, HttpServletResponse response) {
+        ResponseResult<StudentBankInfo> result = new ResponseResult<StudentBankInfo>();
+        try {
+            StudentBankInfo studentBankInfo = studentService.selectBankInfo(studentId);
+            result.setSuccess(true);
+            result.setData(studentBankInfo);
+        } catch (Exception e) {
+            result.setSuccess(false);
+            result.setMessage("exception:" + e);
+            logger.error("exception:", e);
+        }
+        JsonUtils.writeJson(result, request, response);
     }
 }

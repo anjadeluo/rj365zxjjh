@@ -1,5 +1,7 @@
 package cn.jade.rjzxjjh.model;
 
+import cn.jade.rjzxjjh.utils.StringUtils;
+
 import java.util.Date;
 import java.util.List;
 
@@ -24,12 +26,22 @@ public class Student extends BasicModel<Student> {
     private String relatAddress;
     private String homeAddress;
 
+    private String strId;
+
+    public String getStrId() {
+        return strId;
+    }
+
+    public void setStrId(String strId) {
+        this.strId = strId;
+    }
+
     private StudentBankInfo studentBankInfo;
     private List<StudentGuardian> studentGuardianList;
     private List<StudentSchoolInfo> studentSchoolInfoList;
 
     public Integer getId() {
-        return id;
+        return StringUtils.isNotBlank(strId)?Integer.parseInt(strId):id;
     }
 
     public void setId(Integer id) {

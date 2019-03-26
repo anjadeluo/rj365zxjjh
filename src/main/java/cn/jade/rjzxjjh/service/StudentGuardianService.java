@@ -5,6 +5,7 @@ import cn.jade.rjzxjjh.mapper.StudentGuardianMapper;
 import cn.jade.rjzxjjh.model.Student;
 import cn.jade.rjzxjjh.model.StudentBankInfo;
 import cn.jade.rjzxjjh.model.StudentGuardian;
+import cn.jade.rjzxjjh.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,10 @@ public class StudentGuardianService {
 
     public int save(StudentGuardian studentGuardian) {
         int result = 0;
-        if (studentGuardian.getId() != null) {
+        if (studentGuardian.getId() != null || StringUtils.isNotBlank(studentGuardian.getStrId())) {
+            if (studentGuardian.getId() == null && StringUtils.isNotBlank(studentGuardian.getStrId())) {
+                studentGuardian.setId(Integer.parseInt(studentGuardian.getStrId()));
+            }
             studentGuardian.preUpdate();
             result = studentGuardianMapper.updateByPrimaryKeySelective(studentGuardian);
         } else {

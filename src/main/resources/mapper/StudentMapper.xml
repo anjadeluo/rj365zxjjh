@@ -26,19 +26,18 @@
     <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
     <result column="update_reason" jdbcType="VARCHAR" property="updateReason" />
     <result column="remarks" jdbcType="VARCHAR" property="remarks" />
-
+  </resultMap>
     <!--银行账户信息-->
-    <association property="studentBankInfo" javaType="cn.jade.rjzxjjh.model.StudentBankInfo">
+  <resultMap id="BankResultMap" type="cn.jade.rjzxjjh.model.StudentBankInfo">
       <id property="id" column="b_id"/>
       <result property="studentId" column="b_student_id"/>
       <result property="bankName" column="b_bank_name"/>
       <result property="bankUserName" column="b_bank_user_name"/>
       <result property="bankCardId" column="b_bank_card_id"/>
       <result property="description" column="b_description"/>
-    </association>
-
+  </resultMap>
     <!--监护人信息-->
-    <collection property="studentGuardianList" ofType="cn.jade.rjzxjjh.model.StudentGuardian">
+  <resultMap id="GuardianResultMap" type="cn.jade.rjzxjjh.model.StudentGuardian">
       <id column="g_id" property="id" jdbcType="INTEGER" />
       <result column="g_name" property="name"/>
       <result column="g_relation" property="relation"/>
@@ -51,10 +50,9 @@
       <result column="g_email" property="email"/>
       <result column="g_workspace" property="workspace"/>
       <result column="g_relat_address" property="relatAddress"/>
-    </collection>
-
+  </resultMap>
     <!--就学信息-->
-    <collection property="studentSchoolInfoList" ofType="cn.jade.rjzxjjh.model.StudentSchoolInfo">
+  <resultMap id="SchoolResultMap" type="cn.jade.rjzxjjh.model.StudentSchoolInfo">
       <id column="s_id" property="id" jdbcType="INTEGER" />
       <result column="s_student_id" property="studentId"/>
       <result column="s_school_name" property="schoolName"/>
@@ -67,7 +65,6 @@
       <result column="s_class_teacher_phone" property="classTeacherPhone"/>
       <result column="s_class_teacher_weixin" property="classTeacherWeixin"/>
       <result column="s_school_address" property="schoolAddress"/>
-    </collection>
   </resultMap>
   <sql id="Base_Column_List">
     a.id, a.name, a.sex, a.age, a.id_card_number, a.id_card_start_date, a.id_card_end_date, a.nation,
@@ -96,21 +93,33 @@
   </select>
 
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select <include refid="Base_Column_List" />, <include refid="Guardian_Column_List" />,
-            <include refid="SchoolInfo_Column_List" />, <include refid="Bank_Column_List" />
-    from student a LEFT JOIN student_guardian g ON a.id = g.student_id
-                   LEFT JOIN student_school_info s ON a.id = s.student_id
-                   LEFT JOIN student_bank_info b ON a.id = b.student_id
-    where a.id = #{id,jdbcType=INTEGER}
+    select <include refid="Base_Column_List" />
+    from student a where a.id = #{id,jdbcType=INTEGER}
   </select>
+
   <select id="selectByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select <include refid="Base_Column_List" />, <include refid="Guardian_Column_List" />,
-            <include refid="SchoolInfo_Column_List" />, <include refid="Bank_Column_List" />
-    from student a LEFT JOIN student_guardian g ON a.id = g.student_id
-                   LEFT JOIN student_school_info s ON a.id = s.student_id
-                   LEFT JOIN student_bank_info b ON a.id = b.student_id
-    where a.username = #{username,jdbcType=VARCHAR}
+    select <include refid="Base_Column_List" />
+    from student a where a.username = #{username,jdbcType=VARCHAR}
   </select>
+
+  <select id="selectBankInfo" parameterType="java.lang.Integer" resultMap="BankResultMap">
+    select <include refid="Bank_Column_List" />
+    from student_bank_info b
+    where b.student_id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectSchoolInfo" parameterType="java.lang.Integer" resultMap="SchoolResultMap">
+    select <include refid="SchoolInfo_Column_List" />
+    from student_school_info s
+    where s.student_id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectGuardian" parameterType="java.lang.Integer" resultMap="GuardianResultMap">
+    select <include refid="Guardian_Column_List" />
+    from student_guardian g
+    where g.student_id = #{id,jdbcType=INTEGER}
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from student where id = #{id,jdbcType=INTEGER}
   </delete>
