@@ -100,6 +100,7 @@ textarea{height:80px; background:none;}
 .iselect-wrapper{position:relative;width:370px;height:28px;padding:0 20px 0 5px;line-height:28px;border-width:1px;border-style:solid;border-left-color:#c5c5c5;border-top-color:#c5c5c5;border-right-color:#e0e0e0;border-bottom-color:#e0e0e0;background:url(../img/skin_/select_normal.png) no-repeat right center #fff;}
 .iselect-wrapper:hover{background:url(../img/skin_/select_hover.png) no-repeat right center #fff;}
 .iselect-wrapper .iselect{position:absolute;top:-2px;*top:3px;left:-1px;opacity:0;filter:alpha(opacity=0);outline:0 none;z-index:2;}
+.kv-item-content .iselect-wrapper{width:348px!important;}
 /*一段区域数值输入（比如时间段，数字段等）*/
 .kv-item.interval input[type=text],.kv-item .interval input[type=text]{float:left;width:100px;}
 .kv-item .division{float:left;margin:0 5px;color:#666;}

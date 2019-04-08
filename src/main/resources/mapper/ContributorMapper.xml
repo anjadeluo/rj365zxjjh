@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.jade.rjzxjjh.mapper.ContributorMapper" >
+  <resultMap id="BaseResultMap" type="cn.jade.rjzxjjh.model.Contributor" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="weixin" property="weixin" jdbcType="VARCHAR" />
+    <result column="profession" property="profession" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="money" property="money" jdbcType="DOUBLE" />
+    <result column="contributor_date" property="contributorDate" jdbcType="DATE" />
+    <result column="brokerage" property="brokerage" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="DATE" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_date" property="updateDate" jdbcType="DATE" />
+    <result column="update_reason" property="updateReason" jdbcType="VARCHAR" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, name, sex, phone, weixin, profession, address, money, contributor_date, brokerage,
+    create_date, username, update_user, update_date, update_reason, remarks
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select <include refid="Base_Column_List" />
+    from contributor where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="findList" resultMap="BaseResultMap" parameterType="cn.jade.rjzxjjh.model.Contributor" >
+    select <include refid="Base_Column_List" />
+    from contributor
+    ORDER BY contributor_date DESC
+    <if test="page != null">
+      limit #{page.currentPage}, #{page.pageSize}
+    </if>
+  </select>
+
+  <select id="getCount" resultType="java.lang.Long" parameterType="cn.jade.rjzxjjh.model.Contributor">
+    SELECT COUNT(*) FROM contributor
+  </select>
+
+  <select id="getMonthGroupData" resultType="java.util.Map" parameterType="cn.jade.rjzxjjh.model.Contributor">
+    SELECT DATE_FORMAT(contributor_date,'%Y/%m') `month`, SUM(money) money FROM contributor GROUP BY `month`;
+  </select>
+
+  <delete id="delete" parameterType="java.lang.Integer" >
+    delete from contributor where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="cn.jade.rjzxjjh.model.Contributor" >
+    insert into contributor (id, name, sex, 
+      phone, weixin, profession, 
+      address, money, contributor_date, 
+      brokerage, create_date, username, 
+      update_user, update_date, update_reason, 
+      remarks)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{weixin,jdbcType=VARCHAR}, #{profession,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{money,jdbcType=DOUBLE}, #{contributorDate,jdbcType=DATE}, 
+      #{brokerage,jdbcType=VARCHAR}, #{createDate,jdbcType=DATE}, #{username,jdbcType=VARCHAR}, 
+      #{updateUser,jdbcType=VARCHAR}, #{updateDate,jdbcType=DATE}, #{updateReason,jdbcType=VARCHAR}, 
+      #{remarks,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.jade.rjzxjjh.model.Contributor" >
+    insert into contributor
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="weixin != null" >
+        weixin,
+      </if>
+      <if test="profession != null" >
+        profession,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="money != null" >
+        money,
+      </if>
+      <if test="contributorDate != null" >
+        contributor_date,
+      </if>
+      <if test="brokerage != null" >
+        brokerage,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+      <if test="updateReason != null" >
+        update_reason,
+      </if>
+      <if test="remarks != null" >
+        remarks,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="weixin != null" >
+        #{weixin,jdbcType=VARCHAR},
+      </if>
+      <if test="profession != null" >
+        #{profession,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null" >
+        #{money,jdbcType=DOUBLE},
+      </if>
+      <if test="contributorDate != null" >
+        #{contributorDate,jdbcType=DATE},
+      </if>
+      <if test="brokerage != null" >
+        #{brokerage,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=DATE},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=DATE},
+      </if>
+      <if test="updateReason != null" >
+        #{updateReason,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="cn.jade.rjzxjjh.model.Contributor" >
+    update contributor
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="weixin != null" >
+        weixin = #{weixin,jdbcType=VARCHAR},
+      </if>
+      <if test="profession != null" >
+        profession = #{profession,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null" >
+        money = #{money,jdbcType=DOUBLE},
+      </if>
+      <if test="contributorDate != null" >
+        contributor_date = #{contributorDate,jdbcType=DATE},
+      </if>
+      <if test="brokerage != null" >
+        brokerage = #{brokerage,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=DATE},
+      </if>
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=DATE},
+      </if>
+      <if test="updateReason != null" >
+        update_reason = #{updateReason,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.jade.rjzxjjh.model.Contributor" >
+    update contributor
+    set name = #{name,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      weixin = #{weixin,jdbcType=VARCHAR},
+      profession = #{profession,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      money = #{money,jdbcType=DOUBLE},
+      contributor_date = #{contributorDate,jdbcType=DATE},
+      brokerage = #{brokerage,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=DATE},
+      username = #{username,jdbcType=VARCHAR},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_date = #{updateDate,jdbcType=DATE},
+      update_reason = #{updateReason,jdbcType=VARCHAR},
+      remarks = #{remarks,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

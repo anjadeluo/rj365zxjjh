@@ -6,11 +6,11 @@ public class Page<T> {
     private Integer totalPages;
 
     public Integer getCurrentPage() {
-        return currentPage;
+        return currentPage == null ? 0 : currentPage;
     }
 
     public void setCurrentPage(Integer currentPage) {
-        this.currentPage = currentPage;
+        this.currentPage = currentPage == null ? 0 : currentPage;
     }
 
     public Integer getPageSize() {
@@ -18,7 +18,7 @@ public class Page<T> {
     }
 
     public void setPageSize(Integer pageSize) {
-        PageSize = pageSize;
+        PageSize = pageSize == null ? Integer.MAX_VALUE : pageSize;
     }
 
     public Integer getTotalPages() {

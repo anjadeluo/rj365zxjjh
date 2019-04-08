@@ -115,4 +115,8 @@ public class StudentService {
         }
         return -1;
     }
+
+    public StudentSchoolInfo selectLatestSchool(Student student) {
+        return studentSchoolInfoService.selectLataest(student);
+    }
 }

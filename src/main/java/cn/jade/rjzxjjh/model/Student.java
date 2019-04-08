@@ -39,9 +39,18 @@ public class Student extends BasicModel<Student> {
     private StudentBankInfo studentBankInfo;
     private List<StudentGuardian> studentGuardianList;
     private List<StudentSchoolInfo> studentSchoolInfoList;
+    private StudentSchoolInfo currentSchool;
+
+    public StudentSchoolInfo getCurrentSchool() {
+        return currentSchool;
+    }
+
+    public void setCurrentSchool(StudentSchoolInfo currentSchool) {
+        this.currentSchool = currentSchool;
+    }
 
     public Integer getId() {
-        return StringUtils.isNotBlank(strId)?Integer.parseInt(strId):id;
+        return id;
     }
 
     public void setId(Integer id) {

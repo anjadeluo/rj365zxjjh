@@ -75,9 +75,9 @@ public class MenuController {
     @RequestMapping(value = "/edit")
     public String edit(Menu menu, Model model, HttpServletRequest request, HttpServletResponse response) {
         if (menu.getId() != null) {
-//            menu = menuService.select(menu);
+            menu = menuService.select(menu);
         }
-        model.addAttribute("role", menu);
+        model.addAttribute("menu", menu);
         return "menu/menuForm";
     }
 
@@ -89,11 +89,8 @@ public class MenuController {
 
         try {
             int rec = menuService.save(menu);
-            if (rec > 0) {
-                result.setSuccess(true);
-            } else {
-                result.setSuccess(false);
-            }
+            result.setSuccess(true);
+            result.setMessage("保存成功！");
         } catch (MyException e) {
             result.setSuccess(false);
             result.setMessage(e.getMessage());

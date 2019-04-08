@@ -55,8 +55,8 @@
     </delete>
 
     <insert id="insert" parameterType="cn.jade.rjzxjjh.model.Dict">
-        INSERT INTO sys_dict(dict_type, dict_name, dict_index, dict_value, dict_description, visibled)
-            VALUES(#{dictType}, #{dictName}, #{dictIndex}, #{dictValue}, #{dictDescription}, #{visibled}, #{create_user})
+        INSERT INTO sys_dict(dict_type, dict_name, dict_index, dict_value, dict_description, visibled, create_user)
+            VALUES(#{dictType}, #{dictName}, #{dictIndex}, #{dictValue}, #{dictDescription}, #{visibled}, #{createUser})
     </insert>
 
     <update id="update" parameterType="cn.jade.rjzxjjh.model.Dict">

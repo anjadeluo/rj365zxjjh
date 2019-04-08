@@ -64,4 +64,10 @@ public class StudentSchoolInfoService {
     public StudentSchoolInfo select(StudentSchoolInfo studentSchoolInfo) {
         return studentSchoolInfoMapper.selectByPrimaryKey(studentSchoolInfo.getId());
     }
+
+    public StudentSchoolInfo selectLataest(Student student) {
+        StudentSchoolInfo studentSchoolInfo = new StudentSchoolInfo();
+        studentSchoolInfo.setStudentId(student.getId());
+        return studentSchoolInfoMapper.selectLataest(studentSchoolInfo);
+    }
 }

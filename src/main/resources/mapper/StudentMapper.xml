@@ -65,6 +65,7 @@
       <result column="s_class_teacher_phone" property="classTeacherPhone"/>
       <result column="s_class_teacher_weixin" property="classTeacherWeixin"/>
       <result column="s_school_address" property="schoolAddress"/>
+      <result column="s_current_flag" property="currentFlag"/>
   </resultMap>
   <sql id="Base_Column_List">
     a.id, a.name, a.sex, a.age, a.id_card_number, a.id_card_start_date, a.id_card_end_date, a.nation,
@@ -85,7 +86,7 @@
     s.id AS s_id, s.student_id AS s_student_id, s.school_name AS s_school_name, s.college_name AS s_college_name, s.academic_class AS s_academic_class, s.grade AS s_grade,
     s.school_class AS s_school_class, s.class_teacher_name AS s_class_teacher_name, s.class_teacher_sex AS s_class_teacher_sex, s.class_teacher_phone AS s_class_teacher_phone,
     s.class_teacher_weixin AS s_class_teacher_weixin, s.school_address AS s_school_address, s.username AS s_username, s.create_date AS s_create_date, s.update_date AS s_update_date,
-    s.update_user AS s_update_user, s.update_reason AS s_update_reason, s.remarks AS s_remarks
+    s.update_user AS s_update_user, s.update_reason AS s_update_reason, s.remarks AS s_remarks, s.current_flag AS s_current_flag
   </sql>
 
   <select id="getIdByUsername" parameterType="java.lang.String" resultType="java.lang.Integer">

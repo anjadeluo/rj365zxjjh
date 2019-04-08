@@ -9,6 +9,8 @@ import java.util.List;
 
 public class User extends BasicModel<User> implements UserDetails {
 
+    public final static String SUPER_USER = "admin";
+
     private Integer id;
     private String username;
     private String password;

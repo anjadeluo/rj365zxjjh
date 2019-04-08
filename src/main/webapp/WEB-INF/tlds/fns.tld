@@ -48,4 +48,11 @@
         <function-signature>cn.jade.rjzxjjh.model.Dict getDictValue(java.lang.String,java.lang.String)</function-signature>
         <example>${fns:getDictValue()}</example>
     </function>
+    <function>
+        <description>获取所有菜单</description>
+        <name>getMenuList</name>
+        <function-class>cn.jade.rjzxjjh.utils.MenuUtils</function-class>
+        <function-signature>java.util.List getMenuList()</function-signature>
+        <example>${fns:getMenuList()}</example>
+    </function>
 </taglib>

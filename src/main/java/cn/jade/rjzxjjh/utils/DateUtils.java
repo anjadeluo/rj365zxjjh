@@ -34,6 +34,12 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         return DateFormatUtils.format(calendar.getTime(), pattern);
     }
 
+    public static String getDateAddMonth(int month, String pattern) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, month);
+        return DateFormatUtils.format(calendar.getTime(), pattern);
+    }
+
     /**
      * 得到日期字符串 默认格式（yyyy-MM-dd） pattern可以为："yyyy-MM-dd" "HH:mm:ss" "E"
      */

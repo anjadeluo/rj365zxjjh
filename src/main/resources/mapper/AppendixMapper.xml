@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.jade.rjzxjjh.mapper.AppendixMapper" >
+  <resultMap id="BaseResultMap" type="cn.jade.rjzxjjh.model.Appendix" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="appendix_id" property="appendixId" jdbcType="VARCHAR" />
+    <result column="appendix_path" property="appendixPath" jdbcType="VARCHAR" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="update_reason" property="updateReason" jdbcType="VARCHAR" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, appendix_id, appendix_path, username, create_date, update_user, update_date,
+    update_reason, remarks
+  </sql>
+  <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select <include refid="Base_Column_List" />
+    from appendix where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByAppendixId" resultMap="BaseResultMap" parameterType="cn.jade.rjzxjjh.model.Appendix" >
+    select <include refid="Base_Column_List" />
+    from appendix where appendix_id = #{appendixId,jdbcType=VARCHAR}
+    <if test="page != null">
+      limit #{page.currentPage}, #{page.pageSize}
+    </if>
+  </select>
+
+  <delete id="delete" parameterType="java.lang.Integer" >
+    delete from appendix where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="cn.jade.rjzxjjh.model.Appendix" >
+    insert into appendix
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="appendixId != null" >
+        appendix_id,
+      </if>
+      <if test="appendixPath != null" >
+        appendix_path,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+      <if test="updateReason != null" >
+        update_reason,
+      </if>
+      <if test="remarks != null" >
+        remarks,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="appendixId != null" >
+        #{appendixId,jdbcType=VARCHAR},
+      </if>
+      <if test="appendixPath != null" >
+        #{appendixPath,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateReason != null" >
+        #{updateReason,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="update" parameterType="cn.jade.rjzxjjh.model.Appendix" >
+    update appendix
+    <set >
+      <if test="appendixId != null" >
+        appendix_id = #{appendixId,jdbcType=VARCHAR},
+      </if>
+      <if test="appendixPath != null" >
+        appendix_path = #{appendixPath,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateReason != null" >
+        update_reason = #{updateReason,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

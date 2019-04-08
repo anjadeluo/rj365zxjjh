@@ -159,7 +159,7 @@
                             "        <td align='center'>\n" +
                             "           <div class=\"ui-table-td\">" +
                             "              <sec:authorize access='hasRole(\"ROLE_SUPER_ADMIN\")'>"+
-                            "              <a href= \"${rootPath}/dict/edit?id=" + dicts[i].id +"\">编辑</a>&nbsp;" +
+                            "              <a href= \"${rootPath}/dict/edit?dictType=" + dicts[i].dictType +"&dictIndex=" + dicts[i].dictIndex + "\">编辑</a>&nbsp;" +
                             "              <a href=\"javascript:void(0);\" onclick= \"javascript:deleteDict(" + dicts[i].id +")\">删除</a>&nbsp;" +
                             "              </sec:authorize>" +
                             "           </div>\n" +

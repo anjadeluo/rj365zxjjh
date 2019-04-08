@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.jade.rjzxjjh.mapper.LogMapper" >
+  <resultMap id="BaseResultMap" type="cn.jade.rjzxjjh.model.Log" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="remoteAddr" property="remoteAddr" jdbcType="VARCHAR" />
+    <result column="requestUri" property="requestUri" jdbcType="VARCHAR" />
+    <result column="method" property="method" jdbcType="VARCHAR" />
+    <result column="userAgent" property="userAgent" jdbcType="VARCHAR" />
+    <result column="operateType" property="operateType" jdbcType="VARCHAR" />
+    <result column="operateTime" property="operateTime" jdbcType="VARCHAR" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+
+    <result column="params" property="params" jdbcType="LONGVARCHAR" />
+    <result column="exception" property="exception" jdbcType="LONGVARCHAR" />
+    <result column="operateCondition" property="operateCondition" jdbcType="LONGVARCHAR" />
+    <result column="interfaceUrl" property="interfaceUrl" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, title, type, remoteAddr, requestUri, method, userAgent, operateType, operateTime,
+    username, params, exception, operateCondition, interfaceUrl
+  </sql>
+
+  <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select <include refid="Base_Column_List" />
+    from sys_log where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByUsername" resultMap="BaseResultMap" parameterType="cn.jade.rjzxjjh.model.Log" >
+    select <include refid="Base_Column_List" />
+    from sys_log where username = #{username,jdbcType=VARCHAR} ORDER BY operateTime DESC
+    <if test="page != null">
+      limit #{page.currentPage}, #{page.pageSize}
+    </if>
+  </select>
+
+  <select id="selectByUsernameCount" resultType="java.lang.Long" parameterType="cn.jade.rjzxjjh.model.Log" >
+    select count(*) from sys_log where username = #{username,jdbcType=VARCHAR}
+  </select>
+
+  <select id="findAll" resultMap="BaseResultMap" parameterType="cn.jade.rjzxjjh.model.Log" >
+    select <include refid="Base_Column_List" />
+    from sys_log ORDER BY operateTime DESC
+    <if test="page != null">
+      limit #{page.currentPage}, #{page.pageSize}
+    </if>
+  </select>
+
+  <select id="findAllCount" resultType="java.lang.Long" parameterType="cn.jade.rjzxjjh.model.Log" >
+    select count(*) from sys_log
+  </select>
+
+  <delete id="delete" parameterType="java.lang.Integer" >
+    delete from sys_log where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="cn.jade.rjzxjjh.model.Log" >
+    insert into sys_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="remoteAddr != null" >
+        remoteAddr,
+      </if>
+      <if test="requestUri != null" >
+        requestUri,
+      </if>
+      <if test="method != null" >
+        method,
+      </if>
+      <if test="userAgent != null" >
+        userAgent,
+      </if>
+      <if test="operateType != null" >
+        operateType,
+      </if>
+      <if test="operateTime != null" >
+        operateTime,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="params != null" >
+        params,
+      </if>
+      <if test="exception != null" >
+        exception,
+      </if>
+      <if test="operateCondition != null" >
+        operateCondition,
+      </if>
+      <if test="interfaceUrl != null" >
+        interfaceUrl,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="remoteAddr != null" >
+        #{remoteAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="requestUri != null" >
+        #{requestUri,jdbcType=VARCHAR},
+      </if>
+      <if test="method != null" >
+        #{method,jdbcType=VARCHAR},
+      </if>
+      <if test="userAgent != null" >
+        #{userAgent,jdbcType=VARCHAR},
+      </if>
+      <if test="operateType != null" >
+        #{operateType,jdbcType=VARCHAR},
+      </if>
+      <if test="operateTime != null" >
+        #{operateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="params != null" >
+        #{params,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="exception != null" >
+        #{exception,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="operateCondition != null" >
+        #{operateCondition,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="interfaceUrl != null" >
+        #{interfaceUrl,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="update" parameterType="cn.jade.rjzxjjh.model.Log" >
+    update sys_log
+    <set >
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="remoteAddr != null" >
+        remoteAddr = #{remoteAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="requestUri != null" >
+        requestUri = #{requestUri,jdbcType=VARCHAR},
+      </if>
+      <if test="method != null" >
+        method = #{method,jdbcType=VARCHAR},
+      </if>
+      <if test="userAgent != null" >
+        userAgent = #{userAgent,jdbcType=VARCHAR},
+      </if>
+      <if test="operateType != null" >
+        operateType = #{operateType,jdbcType=VARCHAR},
+      </if>
+      <if test="operateTime != null" >
+        operateTime = #{operateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="params != null" >
+        params = #{params,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="exception != null" >
+        exception = #{exception,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="operateCondition != null" >
+        operateCondition = #{operateCondition,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="interfaceUrl != null" >
+        interfaceUrl = #{interfaceUrl,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

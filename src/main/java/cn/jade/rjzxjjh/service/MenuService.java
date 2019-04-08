@@ -112,4 +112,8 @@ public class MenuService {
 
         return null;
     }
+
+    public Menu select(Menu menu) {
+        return menuMapper.select(menu);
+    }
 }

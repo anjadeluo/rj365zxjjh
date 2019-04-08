@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="${ctxStatic}/css/style.css" />
 <link rel="stylesheet" type="text/css" href="${ctxStatic}/css/skin_/form.css" />
-<title>${title}-角色管理</title>
+<title>${title}-字典管理</title>
 </head>
 
 <body>
@@ -19,26 +19,60 @@
             <div class="subfild buttons" style="height: 35px!important; margin-bottom: 10px!important;">
                 <input class="backbutton" type="button" onclick="javascript:history.go(-1);" value="返回" />
             </div>
+            <form id="dictForm" method="post" action-url="${rootPath}/dict/saveDict">
             <div class="subfild-content base-info">
             	<div class="kv-item ue-clear">
-                	<label><span class="impInfo">*</span>角色名称</label>
+                	<label><span class="impInfo">*</span>字典名称</label>
                 	<div class="kv-item-content">
-                        <input type="hidden" id="id" value="${role.id}"/>
-                    	<input type="text" placeholder="角色名称" value="${role.name}" onchange="javascript:rolenameValid($(this))" class="required" id="name" maxlength="30" />
+                        <input type="hidden" id="id" name="id" value="${dict.id}"/>
+                    	<input type="text" placeholder="字典名称" value="${dict.dictName}" class="required" id="dictName" name="dictName" maxlength="30" />
                     </div>
-                    <span class="kv-item-tip">角色名称限制在30个字符</span>
+                    <span class="kv-item-tip">字典名称</span>
                 </div>
             	<div class="kv-item ue-clear">
-                	<label><span class="impInfo">*</span>角色描述</label>
+                	<label><span class="impInfo">*</span>字典标识</label>
                 	<div class="kv-item-content">
-                    	<input type="text" placeholder="角色描述" value="${role.description}" id="description" class="required" />
+                    	<input type="text" placeholder="字典标识" value="${dict.dictType}" id="dictType" name="dictType" class="required" />
                     </div>
-                    <span class="kv-item-tip">角色描述</span>
+                    <span class="kv-item-tip">代表字典的唯一表示，用于获取该字典列表</span>
+                </div>
+            	<div class="kv-item ue-clear">
+                	<label><span class="impInfo">*</span>字典索引</label>
+                	<div class="kv-item-content">
+                    	<input type="text" placeholder="字典索引" value="${dict.dictIndex}" id="dictIndex" name="dictIndex" class="required" />
+                    </div>
+                    <span class="kv-item-tip">代表字典类型的唯一表示，用于获取该字典类型</span>
+                </div>
+            	<div class="kv-item ue-clear">
+                	<label><span class="impInfo">*</span>字典描述</label>
+                	<div class="kv-item-content">
+                    	<input type="text" placeholder="字典描述" value="${dict.dictValue}" id="dictValue" name="dictValue" class="required" />
+                    </div>
+                    <span class="kv-item-tip">索引对应的值</span>
+                </div>
+            	<div class="kv-item ue-clear">
+                	<label><span class="impInfo">*</span>是否显示</label>
+                	<div class="kv-item-content">
+                        <select name="visibled" class="required">
+                            <option value="">--是否显示--</option>
+                            <option value="false" <c:if test="${dict.visibled == false}">selected="selected"</c:if>>否</option>
+                            <option value="true" <c:if test="${dict.visibled == true}">selected="selected"</c:if>>是</option>
+                        </select>
+                    </div>
+                    <span class="kv-item-tip">是否显示</span>
+                </div>
+            	<div class="kv-item ue-clear">
+                	<label>备注</label>
+                	<div class="kv-item-content">
+                    	<input type="text" placeholder="备注" value="${dict.dictDescription}" id="dictDescription" name="dictDescription"/>
+                    </div>
+                    <span class="kv-item-tip">备注</span>
                 </div>
             </div>
             <div class="buttons">
                 <input class="button" type="button" id="submitBtn" value="提交" />
             </div>
+            </form>
         </div>
     </div>
 </div>
@@ -48,43 +82,36 @@
 	$('select').select();
 	$(function() {
 	    $("#submitBtn").on("click", function(){
-            saveRole();
+            submitForm('dictForm');
         });
     })
 
     /**
-     * 用户名存在验证
-     * @param obj
+     * 提交表单
+     * @param formId
+     * @returns {boolean}
      */
-    function rolenameValid(obj) {
-        var flag = true;
-        if (obj.val()) {
-            $.ajax({
-                url: "${rootPath}/role/getByRolename",
-                data: {name: obj.val()},
-                dataType: "json",
-                type: "post",
-                async:false,
-                success: function(data) {
-                    if (data.success) {
-                        obj.parent().next().text("*" + obj.prop("placeholder") + "已经存在").css("color", "red").end().focus();
-                        flag = false;
-                    } else {
-                        if (data.message == null || data.message.indexOf("exception") == -1) {
-                            obj.parent().next().text("√").css("color", "blue").css("font-weight", "bold");
-                            flag = true;
-                        } else {
-                            obj.parent().next().text("× " + data.message).css("color", "red").end().focus();
-                            flag = false;
-                        }
-                    }
-                }, error: function() {
-                    flag = false;
-                    alert("请求错误");
-                }
-            })
+    submitForm = function(formId) {
+        if(!notNULL($(".required"))) {
+            return false;
         }
-        return flag;
+        var actionUtl = $("#" + formId).attr("action-url");
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: actionUtl,
+            contentType: "application/json;charset=UTF-8",
+            data: getFormJsonData($("#" + formId)),
+            success: function (result) {
+                alert(result.message);
+                if (result.success) {
+                    location.href = rootPath + '/dict/list';
+                }
+            },
+            error : function() {
+                alert("异常！");
+            }
+        });
     }
 
     function notNULL(obj) {
@@ -99,33 +126,6 @@
             }
         });
         return flag;
-    }
-
-    function saveRole() {
-	    //非空验证
-        if (!notNULL($(".required"))) {
-            return;
-        }
-        //用户名存在验证
-        if (!rolenameValid($("#name"))) {
-            return;
-        }
-
-        $.ajax({
-            url: "${rootPath}/role/saveRole",
-            type: "post",
-            dataType: "json",
-            data: {id: $("#id").val(), name: $("#name").val(), description: $("#description").val()},
-            success: function(data) {
-                if (data.success) {
-                    $.alert({title: "添加角色", content: "保存成功", boxWidth: "300px"});
-                } else {
-                    $.alert({title: "添加角色", content: data.message, boxWidth: "300px"});
-                }
-            }, error: function(){
-                $.alert({title: "添加角色", content: "请求错误", boxWidth: "300px"});
-            }
-        })
     }
 </script>
 </html>

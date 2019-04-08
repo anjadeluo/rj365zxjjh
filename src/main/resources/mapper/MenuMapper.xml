@@ -24,7 +24,7 @@
     </insert>
 
     <update id="update" parameterType="string">
-        UPDATE bigdas_sequence_menuid
+        UPDATE sys_menu
         <set>
             <if test="name != null and name != ''">
                 name = #{name},

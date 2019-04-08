@@ -15,6 +15,7 @@ body{font:12px/180% Arial, Helvetica, sans-serif,"宋体";}
 #formbox .item{padding-top:5px;height:50px;overflow:hidden;line-height:26px;}
 #formbox .item a:link,#formbox .item a:visited{text-decoration:underline;}
 #formbox .label{width:300px;text-align:right;font-size:16px;}
+#formbox .label2{width:300px;text-align:left;font-size:16px;}
 #formbox .span-150{width:150px;}
 #formbox .text{width:300px;height:30px;padding:4px 3px;border:1px solid #bbb;font-size:14px;font-family:arial,"宋体";}
 #formbox .longtext{width:925px;height:30px;padding:4px 3px;border:1px solid #bbb;font-size:14px;font-family:arial,"宋体";}

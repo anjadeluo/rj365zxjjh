@@ -1,5 +1,6 @@
 package cn.jade.rjzxjjh.utils;
 
+import cn.jade.rjzxjjh.mapper.LogMapper;
 import cn.jade.rjzxjjh.model.Log;
 import cn.jade.rjzxjjh.model.User;
 import org.springframework.web.method.HandlerMethod;
@@ -16,7 +17,7 @@ public class LogUtils {
 
 	public static final String ADMIN_PATH = "rj365zxjjh"; //后台访问地址
 
-//	private static LogMapper logDao = SpringContextHolder.getBean(LogMapper.class);
+	private static LogMapper logDao = SpringContextHolder.getBean(LogMapper.class);
 
 	/**
 	 * 保存日志
@@ -29,8 +30,7 @@ public class LogUtils {
 	 * 保存日志
 	 */
 	public static void saveLog(HttpServletRequest request, Object handler, Exception ex, String title){
-//		User user = UserUtils.getCurrentUser();
-		User user = (User) SessionUtils.get("logined_user");
+	    User user = UserUtils.getCurrentUser();
 		if (user != null && user.getId() != null){
 			Log log = new Log();
 			log.setTitle(title);
@@ -40,27 +40,24 @@ public class LogUtils {
 			log.setRequestUri(request.getRequestURI());
 			log.setParams(request.getParameterMap());
 			log.setMethod(request.getMethod());
-
-			/** 保存操作日志 --start */
-			log.setTitle(title);
+			log.setInterfaceUrl(request.getRequestURI());
 			log.setUsername(user.getUsername());
 
 			//获取方法名
 			String methodName = "["+request.getRequestURI().split("/")[request.getRequestURI().split("/").length-1]+"] ";
 			int operateType = 1;
 			if (StringUtils.isNotBlank(methodName)){
-				if (methodName.contains("insert")){
+				if (methodName.contains("insert") || methodName.contains("update")
+				    || methodName.contains("save") || methodName.contains("edit") || methodName.contains("add")){
 					operateType = 2;
-				}else if (methodName.contains("update")){
-					operateType = 3;
 				}else if (methodName.contains("delete")){
-					operateType = 4;
+					operateType = 3;
 				}else if (methodName.contains("login")){
 					operateType = 0;
 				}
 			}
-			log.setOperateType(operateType + "");   //操作类型 0：登录；1：查询；2：新增；3：修改；4：删除
-			log.setOperateTime(DateUtils.formatDate(new Date(), "yyyyMMddHHmmss"));
+			log.setOperateType(operateType + "");   //操作类型 0：登录；1：查询；2：编辑数据；3：删除
+			log.setOperateTime(DateUtils.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"));
 
 			String condition = methodName;
 			String paramName;
@@ -72,11 +69,11 @@ public class LogUtils {
 				condition += paramName + ":" + paramValue + ",";
 			}
 			log.setOperateCondition(condition);
-			log.setUserAgent(request.getHeader("user-agent"));
-			log.setInterfaceUrl(request.getRequestURI());
 
 			// 异步保存日志
-			new SaveLogThread(log, handler, ex).start();
+			if ("2".equals(log.getOperateType()) || "3".equals(log.getOperateType())) {
+				new SaveLogThread(log, handler, ex).start();
+			}
 			/** 保存操作日志 --end */
 
 		}
@@ -110,13 +107,9 @@ public class LogUtils {
 				log.setTitle(permission);
 			}
 			// 如果有异常，设置异常信息
-//			log.setException(ExceptionsUitls.getStackTraceAsString(ex));
-			// 如果无标题并无异常日志，则不保存信息
-//			if (StringUtils.isBlank(log.getTitle()) && StringUtils.isBlank(log.getException())){
-//				return;
-//			}
+			log.setException(ExceptionsUitls.getStackTraceAsString(ex));
 			// 保存日志信息
-//			logDao.insert(log);
+			logDao.insert(log);
 		}
 	}
 

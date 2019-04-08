@@ -1,12 +1,18 @@
 package cn.jade.rjzxjjh.utils;
 
+import cn.jade.rjzxjjh.model.Menu;
+import cn.jade.rjzxjjh.service.MenuService;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Created by yhsk on 2018/9/25.
  */
 public class MenuUtils {
+
+    private static MenuService menuService = SpringContextHolder.getBean(MenuService.class);
 
     public final static Integer LEVEL_1 = 1;
     public final static Integer LEVEL_2 = 2;
@@ -35,4 +41,9 @@ public class MenuUtils {
             put("20", LEVEL_7);
         }
     };
+
+    public static List<Menu> getMenuList(){
+        List<Menu> menuList = menuService.getAllMenu();
+        return menuList;
+    }
 }

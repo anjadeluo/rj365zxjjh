@@ -29,7 +29,7 @@ body{padding-bottom:20px;}
 .content-list .content-item .content-hd .opt span.report{ background:url(../../img/skin_/p03.png);}
 .content-list .content-item .content-hd .opt span.close{ background:url(../../img/skin_/p04.png);}
 
-.content-list .content-item .content-bd{height:170px;color:#000; overflow:auto; background:#fff;width:100%;}
+.content-list .content-item .content-bd{height:300px;color:#000; overflow:auto; background:#fff;width:100%;}
 .content-list .content-item .content-bd .content-list{padding:10px;}
 .content-list .content-item .content-bd .content-list-item {margin-bottom:10px;overflow:hidden; white-space:nowrap; text-overflow:ellipsis;}
 .content-list .content-item .content-bd .content-list-item .icon{*position:relative;*top:-3px;display:inline-block;margin-right:5px;width:8px;height:9px; background:url(../../img/skin_/plist.png);}

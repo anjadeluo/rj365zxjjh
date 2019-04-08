@@ -10,188 +10,51 @@
 <body>
 <div id="formbox">
     <div class="form">
-        <form id="studentForm" method="post" action-url="${rootPath}/student/saveStudent">
-            <h3>基本信息
-                <c:if test="${student.username == username}">
-                    <span><button type="button" class="editBtn" id="studentEditBtn" onclick="editForm('studentForm')" style="float: right; width: 50px; height: 30px;">编辑</button></span>
-                </c:if>
-            </h3>
+        <form id="applyForm" method="post" action-url="${rootPath}/funding/saveApplication">
+            <h3>申请信息</h3>
             <div class="item">
-                <span class="label"><span class="red">*</span>姓名：</span>
+                <span class="label">姓名：</span>
                 <div class="fl">
-                    <%--<input type="hidden" id="id" name="strId" value="${student.id}" tabindex="0" />--%>
-                    <input type="text" id="name" name="name" class="text required" value="${student.name}" tabindex="1" />
-                    <label id="name_succeed" class="blank"></label>
-                    <span class="clear"></span>
-                    <div id="name_error"></div>
+                    <input type="hidden" id="studentId" name="studentId" value="${applyFlow.student.id}"/>
+                    <input type="hidden" id="lastStep" name="lastStep" value="1"/>
+                    <input type="hidden" id="applyAppendixId" name="applyAppendixId"/>
+                    <label class="label2">${applyFlow.student.name}（${applyFlow.student.sex == '1'?'男':'女'}）</label>
                 </div>
-
-                <span class="label"><span class="red">*</span>身份证号：</span>
+                <span class="label">身份证号：</span>
                 <div class="fl">
-                    <input type="text" id="idCardNumber" name="idCardNumber" class="text required" value="${student.idCardNumber}" tabindex="2"/>
-                    <label id="idCardNumber_succeed" class="blank"></label>
-                    <span class="clear"></span>
-                    <div id="idCardNumber_error"></div>
+                    <label class="label2">${applyFlow.student.idCardNumber}</label>
                 </div>
             </div><!--item end-->
 
             <div class="item">
-                <span class="label"><span class="red">*</span>性别：</span>
+                <span class="label">联系电话：</span>
                 <div class="fl">
-                    <select rel="select" id="sex" name="sex" class="select required" tabindex="3">
-                        <option value="">--请选择--</option>
-                        <c:forEach items="${fns:getDictByType('dict_sex')}" var="dict" varStatus="vs">
-                            <option value="${dict.dictIndex}" <c:if test='${dict.dictIndex == student.sex}'>selected="selected"</c:if>>${dict.dictValue}</option>
-                        </c:forEach>
-                    </select>
-                    <label id="sex_succeed" class="blank"></label>
-                    <span class="clear"></span>
-                    <label id="sex_error"></label>
+                    <label class="label2">${applyFlow.student.phoneNumber}</label>
                 </div>
-                <span class="label"><span class="red">*</span>身份证有效日期起始：</span>
+                <span class="label">学&nbsp;&nbsp;&nbsp;&nbsp;校：</span>
                 <div class="fl">
-                    <input type="text" id="idCardStartDate" name="idCardStartDate" readonly="readonly"
-                           value="<fmt:formatDate value='${student.idCardStartDate}' type='both' pattern='yyyy-MM-dd'/>"
-                           onclick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'idCardEndDate\')}'});" autocomplete="off" class="text Wdate" tabindex="4"/>
-                    <label id="idCardStartDate_succeed" class="blank"></label>
-                    <span class="clear"></span>
-                    <div id="idCardStartDate_error"></div>
+                    <input type="hidden" id="schoolId" name="schoolId"
+                           value="${not empty applyFlow.schoolId?applyFlow.schoolId:applyFlow.student.currentSchool.id}"/>
+                    <label class="label2">${applyFlow.student.currentSchool.schoolName}&nbsp;&nbsp;${applyFlow.student.currentSchool.grade}#${applyFlow.student.currentSchool.schoolClass}</label>
                 </div>
             </div><!--item end-->
 
             <div class="item">
-                <span class="label">年龄：</span>
+                <span class="label">申请书上传：</span>
                 <div class="fl">
-                    <input type="text" id="age" name="age" class="text" value="${student.age}" tabindex="5"/>
-                    <label id="age_succeed" class="blank"></label>
-                    <span class="clear"></span>
-                    <div id="age_error"></div>
+                    <input type="file" class="text" style="text-align: left!important;font-size: 16.6px!important;padding: 0px!important;"/>
                 </div>
-                <span class="label">身份证有效日期结束：</span>
+                <span class="label">申请书模板：</span>
                 <div class="fl">
-                    <input type="text" id="idCardEndDate" name="idCardEndDate" readonly="readonly"
-                           value="<fmt:formatDate value='${student.idCardEndDate}' type='both' pattern='yyyy-MM-dd'/>"
-                           onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'idCardStartDate\')}'})" autocomplete="off" class="text Wdate" tabindex="6"/>
-                    <label id="idCardEndDate_succeed" class="blank"></label>
-                    <span class="clear"></span>
-                    <div id="idCardEndDate_error"></div>
-                </div>
-            </div><!--item end-->
-
-            <div class="item">
-                <span class="label"><span class="red">*</span>籍贯：</span>
-                <div class="fl">
-                    <input type="text" id="nativePlace" name="nativePlace" class="text required" value="${student.nativePlace}" tabindex="7" />
-                    <label id="nativePlace_succeed" class="blank"></label>
-                    <span class="clear"></span>
-                    <div id="nativePlace_error"></div>
-                </div>
-                <span class="label"><span class="red">*</span>民族：</span>
-                <div class="fl">
-                    <select rel="select" id="nation" name="nation" class="select required" tabindex="8">
-                        <option value="">--请选择--</option>
-                        <c:forEach items="${fns:getDictByType('dict_nation')}" var="dict" varStatus="vs">
-                            <option value="${dict.dictIndex}" <c:if test='${dict.dictIndex == student.nation}'>selected="selected"</c:if>>${dict.dictValue}</option>
-                        </c:forEach>
-                    </select>
-                    <label id="nation_succeed" class="blank"></label>
-                    <span class="clear"></span>
-                    <label id="nation_error"></label>
-                </div>
-            </div><!--item end-->
-
-            <div class="item">
-                <span class="label"><span class="red">*</span>户口性质：</span>
-                <div class="fl">
-                    <select rel="select" id="announceType" name="announceType" class="select required" tabindex="9">
-                        <option value="">--请选择--</option>
-                        <c:forEach items="${fns:getDictByType('dict_announceType')}" var="dict" varStatus="vs">
-                            <option value="${dict.dictIndex}" <c:if test='${dict.dictIndex == student.announceType}'>selected="selected"</c:if>>${dict.dictValue}</option>
-                        </c:forEach>
-                    </select>
-                    <label id="announceType_succeed" class="blank"></label>
-                    <span class="clear"></span>
-                    <label id="announceType_error"></label>
-                </div>
-                <span class="label">邮政编码：</span>
-                <div class="fl">
-                    <input type="text" id="mailNumber" name="mailNumber" class="text" value="${student.mailNumber}" tabindex="10" />
-                    <label id="mailNumber_succeed" class="blank"></label>
-                    <span class="clear"></span>
-                    <div id="mailNumber_error"></div>
-                </div>
-            </div><!--item end-->
-
-            <div class="item">
-                <span class="label">户口所在地：</span>
-                <div class="fl">
-                    <input type="text" id="announceAddress" name="announceAddress" class="longtext" value="${student.announceAddress}" tabindex="11" />
-                    <label id="announceAddress_succeed" class="blank"></label>
-                    <span class="clear"></span>
-                    <div id="announceAddress_error"></div>
-                </div>
-            </div><!--item end-->
-
-            <div class="item">
-                <span class="label"><span class="red">*</span>联系电话：</span>
-                <div class="fl">
-                    <input type="text" id="phoneNumber" name="phoneNumber" class="text required" value="${student.phoneNumber}" tabindex="12" />
-                    <label id="phoneNumber_succeed" class="blank"></label>
-                    <span class="clear"></span>
-                    <div id="phoneNumber_error"></div>
-                </div>
-                <span class="label">微信号：</span>
-                <div class="fl">
-                    <input type="text" id="weixinNumber" name="weixinNumber" class="text" value="${student.weixinNumber}" tabindex="13" />
-                    <label id="weixinNumber_succeed" class="blank"></label>
-                    <span class="clear"></span>
-                    <div id="weixinNumber_error"></div>
-                </div>
-            </div><!--item end-->
-
-            <div class="item">
-                <span class="label">QQ：</span>
-                <div class="fl">
-                    <input type="text" id="qqNumber" name="qqNumber" class="text" value="${student.qqNumber}" tabindex="14" />
-                    <label id="qqNumber_succeed" class="blank"></label>
-                    <span class="clear"></span>
-                    <div id="qqNumber_error"></div>
-                </div>
-                <span class="label">电子邮箱：</span>
-                <div class="fl">
-                    <input type="text" id="email" name="email" class="text" value="${student.email}" tabindex="15" />
-                    <label id="email_succeed" class="blank"></label>
-                    <span class="clear"></span>
-                    <div id="email_error"></div>
-                </div>
-            </div><!--item end-->
-
-            <div class="item">
-                <span class="label"><span class="red">*</span>通讯地址：</span>
-                <div class="fl">
-                    <input type="text" id="relatAddress" name="relatAddress" class="longtext required" value="${student.relatAddress}" tabindex="16" />
-                    <label id="relatAddress_succeed" class="blank"></label>
-                    <span class="clear"></span>
-                    <div id="relatAddress_error"></div>
-                </div>
-            </div><!--item end-->
-
-            <div class="item">
-                <span class="label">家庭住址：</span>
-                <div class="fl">
-                    <input type="text" id="homeAddress" name="homeAddress" class="longtext" value="${student.homeAddress}" tabindex="17" />
-                    <label id="homeAddress_succeed" class="blank"></label>
-                    <span class="clear"></span>
-                    <div id="homeAddress_error"></div>
+                    <label class="label2"><a href="#">助学申请书模板</a></label>
                 </div>
             </div><!--item end-->
 
             <div class="item" style="margin-left: 45%!important;">
-                <input type="button" class="yellow_button" id="studentSubmitBtn" onclick="submitForm('studentForm')" value="提交" tabindex="45" />
-                <input type="button" class="yellow_button" id="studentCancelBtn" onclick="cancelForm('studentForm')" value="取消" style="background: #ccc!important; margin-left: 10px;"/>
+                <input type="button" class="yellow_button" id="studentSubmitBtn" onclick="submitForm('applyForm')" value="提交" tabindex="45" />
             </div><!--item end-->
         </form>
-        <h3>监护人信息
+        <%--<h3>监护人信息
             <c:if test="${student.username == username}">
                 <span><button type="button" class="editBtn" id="addGuardian" onclick="editGuardians('')" style="float: right; width: 50px; height: 30px;">添加</button></span>
             </c:if>
@@ -446,13 +309,13 @@
                     <span class="clear"></span>
                     <label id="studentSchoolInfo_schoolClass_error"></label>
                 </div>
-                <%--<span class="label"><span class="red">*</span>学号：</span>
+                &lt;%&ndash;<span class="label"><span class="red">*</span>学号：</span>
                 <div class="fl">
                     <input type="text" id="studentSchoolInfo_number" name="number" class="text required" />
                     <label id="studentSchoolInfo_number_succeed" class="blank"></label>
                     <span class="clear"></span>
                     <label id="studentSchoolInfo_number_error"></label>
-                </div>--%>
+                </div>&ndash;%&gt;
             </div><!--item end-->
 
             <div class="item">
@@ -553,12 +416,12 @@
                 <input type="button" class="yellow_button" id="studentBankSubmitBtn" onclick="submitForm('studentBankForm')" value="提交" tabindex="45" />
                 <input type="button" class="yellow_button" id="studentBankCancelBtn" onclick="cancelForm('studentBankForm')" value="取消" style="background: #ccc!important; margin-left: 10px;"/>
             </div><!--item end-->
-        </form>
+        </form>--%>
     </div>
 </div><!--formbox end-->
 </body>
 <script>
-    var studentId = ${empty student.id?"":student.id};
+    var studentId = "${student.id}";
     var bankId = "${studentBankInfo.id}";
     var schoolSessionList = [];
     var guardinsSessionList = [];
@@ -573,8 +436,10 @@
         $("#studentBankSubmitBtn,#studentBankCancelBtn").css("display", "none");
     }
 
-    getGuardianList(studentId);
-    getSchoolList(studentId);
+    $(function(){
+        getGuardianList(studentId);
+        getSchoolList(studentId);
+    })
 
     /**
      * 取消操作

@@ -19,6 +19,7 @@ public class UserUtils {
     public static final String NORMAL_ROLE_NAME = "ROLE_USER";
     public static final String NORMAL_ROLE_DESCRIPTION = "普通用户";
     private static RoleService roleService = SpringContextHolder.getBean(RoleService.class);
+    public static final String SUPER_NAME = "admin";
 
     public static User getCurrentUser() {
         try {

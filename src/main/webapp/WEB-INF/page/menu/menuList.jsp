@@ -129,13 +129,14 @@
                     var html = "";
 
                     for(var i=0;i < menus.length;i++) {
+                        var menuType = menus[i].menuType == "1"?"功能菜单":"业务菜单";
                         html += "<tr data-tt-id=\""+ menus[i].id +"\" data-tt-parent-id=\""+ menus[i].pid +"\">\n" +
                             "        <td>\n<span class=\"ui-table-td\" style='cursor:pointer;'>"+menus[i].name+"</span>\n</td>\n" +
                             "        <td>\n<span class=\"ui-table-td\">"+menus[i].description+"</span>\n</td>\n" +
                             "        <td>\n<span class=\"ui-table-td\">"+menus[i].authority+"</span>\n</td>\n" +
                             "        <td>\n<span class=\"ui-table-td\">"+menus[i].url+"</span>\n</td>\n" +
                             "        <td>\n<span class=\"ui-table-td\">"+menus[i].method+"</span>\n</td>\n" +
-                            "        <td>\n<span class=\"ui-table-td\">\${fns:getDictValue('dict_menu_type', "+ menus[i].menuType +")}</span>\n</td>\n" +
+                            "        <td>\n<span class=\"ui-table-td\">"+ menuType +"</span>\n</td>\n" +
                             "        <td align='center'>\n" +
                             "           <span class=\"ui-table-td\">" +
                             "              <sec:authorize access='hasRole(\"ROLE_SUPER_ADMIN\")'>"+

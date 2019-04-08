@@ -101,5 +101,4 @@ function resize(resizeHandle){
 			},10);	
 		}
 	});
-	
 }

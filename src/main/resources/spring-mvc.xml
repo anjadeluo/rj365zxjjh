@@ -57,20 +57,23 @@
     </bean>-->
 
     <!-- 拦截器配置，拦截顺序：先执行后定义的，排在第一位的最后执行。-->
-    <!--<mvc:interceptors>
+    <mvc:interceptors>
         <mvc:interceptor>
-            &lt;!&ndash; 需拦截的地址 &ndash;&gt;
-            &lt;!&ndash; 一级目录 &ndash;&gt;
-            <mvc:mapping path="/**" />
-            &lt;!&ndash; 需排除拦截的地址 &ndash;&gt;
+            <!-- 需拦截的地址 -->
+            <!-- 一级目录 -->
+            <mvc:mapping path="${rootPath}/?*/**" />
+            <!-- 需排除拦截的地址 -->
             <mvc:exclude-mapping path="/" />
-            <mvc:exclude-mapping path="/login" />
-            <mvc:exclude-mapping path="/rest/**" />
-            <mvc:exclude-mapping path="/regeditUser" />
-            <mvc:exclude-mapping path="/updatepwd" />
-            <mvc:exclude-mapping path="/index" />
+            <mvc:exclude-mapping path="${rootPath}/" />
+            <mvc:exclude-mapping path="${rootPath}/login" />
+            <mvc:exclude-mapping path="${rootPath}/loginPage" />
+            <mvc:exclude-mapping path="${rootPath}/user/toRegeditUser" />
+            <mvc:exclude-mapping path="${rootPath}/main" />
+            <mvc:exclude-mapping path="${rootPath}/index" />
+            <mvc:exclude-mapping path="${rootPath}/menu" />
+            <mvc:exclude-mapping path="/static/**" />
             <mvc:exclude-mapping path="/j_spring_security_check" />
             <bean class="cn.jade.rjzxjjh.interceptor.LoginInterceptor" />
         </mvc:interceptor>
-    </mvc:interceptors>-->
+    </mvc:interceptors>
 </beans>

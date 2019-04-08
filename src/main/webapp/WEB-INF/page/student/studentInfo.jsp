@@ -369,13 +369,16 @@
                                 <th width="5%">
                                     <div class="ui-table-th"><span class="ui-table-thTitle">班级</span><span class="ui-table-drag"></span></div>
                                 </th>
-                                <th width="10%">
+                                <th width="3%">
+                                    <div class="ui-table-th"><span class="ui-table-thTitle">是否在读</span><span class="ui-table-drag"></span></div>
+                                </th>
+                                <th width="9%">
                                     <div class="ui-table-th"><span class="ui-table-thTitle">班主任姓名(性别)</span><span class="ui-table-drag"></span></div>
                                 </th>
-                                <th width="10%">
+                                <th width="9%">
                                     <div class="ui-table-th"><span class="ui-table-thTitle">班主任联系电话</span><span class="ui-table-drag"></span></div>
                                 </th>
-                                <th width="10%">
+                                <th width="9%">
                                     <div class="ui-table-th"><span class="ui-table-thTitle">班主任微信号</span><span class="ui-table-drag"></span></div>
                                 </th>
                                 <th width="20%">
@@ -446,13 +449,17 @@
                     <span class="clear"></span>
                     <label id="studentSchoolInfo_schoolClass_error"></label>
                 </div>
-                <%--<span class="label"><span class="red">*</span>学号：</span>
+                <span class="label"><span class="red">*</span>是否在读：</span>
                 <div class="fl">
-                    <input type="text" id="studentSchoolInfo_number" name="number" class="text required" />
-                    <label id="studentSchoolInfo_number_succeed" class="blank"></label>
+                    <select rel="select" id="studentSchoolInfo_currentFlag" name="currentFlag" class="select required" tabindex="36">
+                        <option value="">--请选择--</option>
+                        <option value="0">否</option>
+                        <option value="1">是</option>
+                    </select>
+                    <label id="studentSchoolInfo_currentFlag_succeed" class="blank"></label>
                     <span class="clear"></span>
-                    <label id="studentSchoolInfo_number_error"></label>
-                </div>--%>
+                    <label id="studentSchoolInfo_currentFlag_error"></label>
+                </div>
             </div><!--item end-->
 
             <div class="item">
@@ -468,7 +475,7 @@
                     <select rel="select" id="studentSchoolInfo_classTeacherSex" name="classTeacherSex" class="select required" tabindex="36">
                         <option value="">--请选择--</option>
                         <c:forEach items="${fns:getDictByType('dict_sex')}" var="dict" varStatus="vs">
-                            <option value="${dict.dictIndex}">${dict.dictValue}</option>
+                            <option value="${dict.dictIndex}" >${dict.dictValue}</option>
                         </c:forEach>
                     </select>
                     <label id="studentSchoolInfo_classTeacherSex_succeed" class="blank"></label>
@@ -558,23 +565,25 @@
 </div><!--formbox end-->
 </body>
 <script>
-    var studentId = ${empty student.id?"":student.id};
+    var studentId = "${student.id}";
     var bankId = "${studentBankInfo.id}";
     var schoolSessionList = [];
     var guardinsSessionList = [];
-    if (studentId) {
-        $("#studentForm input").attr("disabled","disabled");
-        $("#studentForm select").attr("disabled","disabled");
-        $("#studentSubmitBtn,#studentCancelBtn").css("display", "none");
-    }
-    if (bankId) {
-        $("#studentBankForm input").attr("disabled","disabled");
-        $("#studentBankForm select").attr("disabled","disabled");
-        $("#studentBankSubmitBtn,#studentBankCancelBtn").css("display", "none");
-    }
+    $(function () {
+        if (studentId) {
+            $("#studentForm input").attr("disabled","disabled");
+            $("#studentForm select").attr("disabled","disabled");
+            $("#studentSubmitBtn,#studentCancelBtn").css("display", "none");
+        }
+        if (bankId) {
+            $("#studentBankForm input").attr("disabled","disabled");
+            $("#studentBankForm select").attr("disabled","disabled");
+            $("#studentBankSubmitBtn,#studentBankCancelBtn").css("display", "none");
+        }
 
-    getGuardianList(studentId);
-    getSchoolList(studentId);
+        getGuardianList(studentId);
+        getSchoolList(studentId);
+    })
 
     /**
      * 取消操作
@@ -617,7 +626,7 @@
             dataType: "json",
             url: actionUtl,
             contentType: "application/json;charset=UTF-8",
-            data: JSON.stringify(getFormData($("#" + formId))),
+            data: getFormJsonData($("#" + formId)),
             success: function (result) {
                 if (result.success) {
                     if (formId == 'studentSchoolForm') {
@@ -705,6 +714,9 @@
      * @param studentId
      */
     getSchoolList = function(studentId) {
+        if (!studentId) {
+            return false;
+        }
         $.ajax({
             url: rootPath + "/student/getSchoolListData",
             data: {studentId: studentId},
@@ -724,6 +736,7 @@
                             "        <td>\n<div class=\"ui-table-td\">"+schools[i].academicClass+"</div>\n</td>\n" +
                             "        <td>\n<div class=\"ui-table-td\">"+schools[i].grade+"</div>\n</td>\n" +
                             "        <td>\n<div class=\"ui-table-td\">"+schools[i].schoolClass+"</div>\n</td>\n" +
+                            "        <td>\n<div class=\"ui-table-td\">"+(schools[i].currentFlag == '1'?'是':'否')+"</div>\n</td>\n" +
                             "        <td>\n<div class=\"ui-table-td\">"+schools[i].classTeacherName + "（" + (schools[i].classTeacherSex == '1'?"男":"女") +"）</div>\n</td>\n" +
                             "        <td>\n<div class=\"ui-table-td\">"+schools[i].classTeacherPhone+"</div>\n</td>\n" +
                             "        <td>\n<div class=\"ui-table-td\">"+schools[i].classTeacherWeixin+"</div>\n</td>\n" +
@@ -753,6 +766,9 @@
      * @param studentId
      */
     getGuardianList = function(studentId) {
+        if (!studentId) {
+            return false;
+        }
         $.ajax({
             url: rootPath + "/student/getGuardianListData",
             data: {studentId: studentId},
@@ -815,7 +831,8 @@
         $("#studentSchoolInfo_academicClass").val(school.academicClass);
         $("#studentSchoolInfo_schoolClass").val(school.schoolClass);
         $("#studentSchoolInfo_classTeacherName").val(school.classTeacherName);
-        $("#studentSchoolInfo_classTeacherSex").val(school.classTeacherName);
+        $("#studentSchoolInfo_classTeacherSex").val(school.classTeacherSex);
+        $("#studentSchoolInfo_currentFlag").val(school.currentFlag);
         $("#studentSchoolInfo_classTeacherPhone").val(school.classTeacherPhone);
         $("#studentSchoolInfo_classTeacherWeixin").val(school.classTeacherWeixin);
         $("#studentSchoolInfo_schoolAddress").val(school.schoolAddress);

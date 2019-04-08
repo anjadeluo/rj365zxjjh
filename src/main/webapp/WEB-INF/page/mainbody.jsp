@@ -31,9 +31,9 @@
                     <ul class="subnav">
                         <li class="subnav-li current" href="${rootPath}/index" data-id="1"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">首页</span></a></li>
                         <li class="subnav-li" href="${rootPath}/student/studentInfo"  data-id="02"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">个人信息</span></a></li>
-                        <li class="subnav-li" href="table.html"  data-id="03"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">我的日志</span></a></li>
-                        <li class="subnav-li" href="table.html" data-id="04"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">通知公告</span></a></li>
-                        <li class="subnav-li" href="table.html" data-id="05"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">新闻资讯</span></a></li>
+                        <%--<li class="subnav-li" href="table.html"  data-id="03"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">我的日志</span></a></li>--%>
+                        <%--<li class="subnav-li" href="table.html" data-id="04"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">通知公告</span></a></li>--%>
+                        <%--<li class="subnav-li" href="table.html" data-id="05"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">新闻资讯</span></a></li>--%>
                     </ul>
                 </li>
                 </sec:authorize>
@@ -42,14 +42,17 @@
                     <a href="javascript:;" class="ue-clear"><i class="nav-ivon"></i><span class="nav-text">助学管理</span></a>
                     <ul class="subnav">
                     <sec:authorize access="hasAnyAuthority('sys:funding:application', 'ROLE_SUPER_ADMIN')">
-                        <li class="subnav-li" href="${rootPath}/funding/application" data-id="11"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">助学申请</span></a></li>
+                        <li class="subnav-li" href="${rootPath}/funding/applicationList" data-id="11"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">助学申请</span></a></li>
                     </sec:authorize>
-                    <sec:authorize access="hasAnyAuthority('sys:funding:donation', 'ROLE_SUPER_ADMIN')">
-                        <li class="subnav-li" href="${rootPath}/funding/donation" data-id="12"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">爱心捐赠</span></a></li>
+                    <sec:authorize access="hasAnyAuthority('sys:funding:contributor', 'ROLE_SUPER_ADMIN')">
+                        <li class="subnav-li" href="${rootPath}/contributor/list" data-id="12"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">募资登记</span></a></li>
                     </sec:authorize>
-                    <sec:authorize access="hasAnyAuthority('sys:funding:approve', 'ROLE_SUPER_ADMIN')">
-                        <li class="subnav-li" href="${rootPath}/funding/approve" data-id="13"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">审批管理</span></a></li>
+                    <sec:authorize access="hasAnyAuthority('sys:funding:aided', 'ROLE_SUPER_ADMIN')">
+                        <li class="subnav-li" href="${rootPath}/aided/list" data-id="13"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">爱心捐赠</span></a></li>
                     </sec:authorize>
+                    <%--<sec:authorize access="hasAnyAuthority('sys:funding:approve', 'ROLE_SUPER_ADMIN')">
+                        <li class="subnav-li" href="${rootPath}/funding/approve" data-id="14"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">审批管理</span></a></li>
+                    </sec:authorize>--%>
                     </ul>
                 </li>
                 </sec:authorize>
@@ -84,6 +87,9 @@
                     </sec:authorize>
                     <sec:authorize access="hasAnyAuthority('sys:manager:dict', 'ROLE_SUPER_ADMIN')">
                         <li class="subnav-li" data-id="34" href="${rootPath}/dict/list"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">字典管理</span></a></li>
+                    </sec:authorize>
+                    <sec:authorize access="hasAnyAuthority('sys:manager:log', 'ROLE_SUPER_ADMIN')">
+                        <li class="subnav-li" data-id="35" href="${rootPath}/log/list"><a href="javascript:;" class="ue-clear"><i class="subnav-icon"></i><span class="subnav-text">操作日志</span></a></li>
                     </sec:authorize>
                     </ul>
                 </li>

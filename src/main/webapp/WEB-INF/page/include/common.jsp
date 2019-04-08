@@ -24,5 +24,9 @@
 <script type="text/javascript" src="${ctxStatic}/js/jquery-confirm.min.js"></script>
 <script type="text/javascript" src="${ctxStatic}/js/jquery.dialog.js"></script>
 <script type="text/javascript" src="${ctxStatic}/js/jquery.ztree.core-3.5.js"></script>
+<script type="text/javascript" src="${ctxStatic}/common/js/myCommon.js"></script>
 <%--<link rel="icon" href="${ctxStatic}/images/yhlogo.png">--%>
-<script>var rootPath = "${rootPath}", ctx = "${ctx}", ctxStatic = "${ctxStatic}", publicStatic = "${publicStatic}";</script>
+<script>
+    var rootPath = "${rootPath}", ctx = "${ctx}", ctxStatic = "${ctxStatic}", publicStatic = "${publicStatic}";
+    var pageSize = {pageSize10: 10, pageSize15: 15, pageSize20: 20};
+</script>

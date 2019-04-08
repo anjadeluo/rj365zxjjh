@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.jade.rjzxjjh.mapper.ApplyFlowMapper" >
+  <resultMap id="BaseResultMap" type="cn.jade.rjzxjjh.model.ApplyFlow" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="last_step" property="lastStep" jdbcType="INTEGER" />
+    <result column="student_id" property="studentId" jdbcType="INTEGER" />
+    <result column="current_school" property="schoolId" jdbcType="INTEGER" />
+    <result column="apply_date" property="applyDate" jdbcType="TIMESTAMP" />
+    <result column="apply_appendix_id" property="applyAppendixId" jdbcType="VARCHAR" />
+    <result column="apply_remarks" property="applyRemarks" jdbcType="VARCHAR" />
+    <result column="checker" property="checker" jdbcType="VARCHAR" />
+    <result column="check_result" property="checkResult" jdbcType="VARCHAR" />
+    <result column="check_sdate" property="checkSdate" jdbcType="TIMESTAMP" />
+    <result column="check_edate" property="checkEdate" jdbcType="TIMESTAMP" />
+    <result column="check_appendix_id" property="checkAppendixId" jdbcType="VARCHAR" />
+    <result column="offline_verifier" property="offlineVerifier" jdbcType="VARCHAR" />
+    <result column="offline_verify_result" property="offlineVerifyResult" jdbcType="VARCHAR" />
+    <result column="offline_verify_appendix" property="offlineVerifyAppendix" jdbcType="VARCHAR" />
+    <result column="offline_verify_sdate" property="offlineVerifySdate" jdbcType="TIMESTAMP" />
+    <result column="offline_verify_edate" property="offlineVerifyEdate" jdbcType="TIMESTAMP" />
+    <result column="approver" property="approver" jdbcType="VARCHAR" />
+    <result column="approve_result" property="approveResult" jdbcType="VARCHAR" />
+    <result column="approve_suggestion" property="approveSuggestion" jdbcType="VARCHAR" />
+    <result column="approve_date" property="approveDate" jdbcType="TIMESTAMP" />
+    <result column="bank_name" property="bankName" jdbcType="VARCHAR" />
+    <result column="bank_username" property="bankUsername" jdbcType="VARCHAR" />
+    <result column="bank_no" property="bankNo" jdbcType="VARCHAR" />
+    <result column="bank_remarks" property="bankRemarks" jdbcType="VARCHAR" />
+    <result column="grant_money" property="grantMoney" jdbcType="DOUBLE" />
+    <result column="grant_date" property="grantDate" jdbcType="TIMESTAMP" />
+    <result column="grant_accountant" property="grantAccountant" jdbcType="VARCHAR" />
+    <result column="grant_cashier" property="grantCashier" jdbcType="VARCHAR" />
+    <result column="grant_remarks" property="grantRemarks" jdbcType="VARCHAR" />
+    <result column="receipt_appendix_id" property="receiptAppendixId" jdbcType="VARCHAR" />
+    <result column="receipt_date" property="receiptDate" jdbcType="TIMESTAMP" />
+    <result column="receipt_remarks" property="receiptRemarks" jdbcType="VARCHAR" />
+
+    <association property="student" javaType="cn.jade.rjzxjjh.model.Student">
+      <id column="s_student_id" property="id"></id>
+      <result column="s_name" property="name"/>
+      <result column="s_sex" property="sex"/>
+      <result column="s_phone_number" property="phoneNumber"/>
+      <association property="currentSchool" javaType="cn.jade.rjzxjjh.model.StudentSchoolInfo">
+        <id column="school_id" property="id"/>
+        <result column="school_name" property="schoolName"/>
+        <result column="school_grade" property="grade"/>
+        <result column="school_class" property="schoolClass"/>
+      </association>
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    a.id, a.last_step, a.student_id, a.school_id `current_school`, a.apply_date, a.apply_appendix_id, a.apply_remarks, a.checker,
+    a.check_result, a.check_sdate, a.check_edate, a.check_appendix_id, a.offline_verifier, a.offline_verify_result,
+    a.offline_verify_appendix, a.offline_verify_sdate, a.offline_verify_edate, a.approver, a.approve_result,
+    a.approve_suggestion, a.approve_date, a.bank_name, a.bank_username, a.bank_no, a.bank_remarks,
+    a.grant_money, a.grant_date, a.grant_accountant, a.grant_cashier, a.grant_remarks, a.receipt_appendix_id,
+    a.receipt_date, a.receipt_remarks
+  </sql>
+  <sql id="Student_Column_list">
+    stu.id `s_student_id`, stu.name `s_name`, stu.sex `s_sex`, stu.phone_number `s_phone_number`
+  </sql>
+  <sql id="School_Column_list">
+    sch.id `school_id`, sch.school_name, sch.grade `school_grade`, sch.school_class
+  </sql>
+  <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select <include refid="Base_Column_List" />, <include refid="Student_Column_list" />, <include refid="School_Column_list" />
+    from apply_flow a
+    LEFT JOIN student stu ON a.student_id = stu.id
+    LEFT JOIN student_school_info sch ON stu.id = sch.student_id AND sch.current_flag = '1'
+    where a.id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectLastestApply" resultMap="BaseResultMap" parameterType="cn.jade.rjzxjjh.model.ApplyFlow" >
+    select <include refid="Base_Column_List" />, <include refid="Student_Column_list" />, <include refid="School_Column_list" />
+    from apply_flow a
+    LEFT JOIN student stu ON a.student_id = stu.id
+    LEFT JOIN student_school_info sch ON stu.id = sch.student_id AND sch.current_flag = '1'
+    where a.student_id = #{studentId,jdbcType=INTEGER} AND a.last_step != '7'
+  </select>
+
+  <select id="findList" resultMap="BaseResultMap" parameterType="cn.jade.rjzxjjh.model.ApplyFlow" >
+    select <include refid="Base_Column_List" />
+    from apply_flow a WHERE 1=1
+    <if test="studentId != '' and studentId != null">
+      AND a.student_id = #{studentId, jdbcType=INTEGER}
+    </if>
+    ORDER BY a.apply_date, a.student_id
+    <if test="page != null">
+      limit #{page.currentPage}, #{page.pageSize}
+    </if>
+  </select>
+
+  <select id="findListCount" resultType="java.lang.Long" parameterType="cn.jade.rjzxjjh.model.ApplyFlow" >
+    select count(*) from apply_flow WHERE 1=1
+    <if test="studentId != '' and studentId != null">
+      AND student_id = #{studentId, jdbcType=INTEGER}
+    </if>
+  </select>
+
+  <delete id="delete" parameterType="java.lang.Integer" >
+    delete from apply_flow where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="cn.jade.rjzxjjh.model.ApplyFlow" >
+    insert into apply_flow
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="lastStep != null" >
+        last_step,
+      </if>
+      <if test="studentId != null" >
+        student_id,
+      </if>
+      <if test="schoolId != null" >
+        school_id,
+      </if>
+      <if test="applyDate != null" >
+        apply_date,
+      </if>
+      <if test="applyAppendixId != null" >
+        apply_appendix_id,
+      </if>
+      <if test="applyRemarks != null" >
+        apply_remarks,
+      </if>
+      <if test="checker != null" >
+        checker,
+      </if>
+      <if test="checkResult != null" >
+        check_result,
+      </if>
+      <if test="checkSdate != null" >
+        check_sdate,
+      </if>
+      <if test="checkEdate != null" >
+        check_edate,
+      </if>
+      <if test="checkAppendixId != null" >
+        check_appendix_id,
+      </if>
+      <if test="offlineVerifier != null" >
+        offline_verifier,
+      </if>
+      <if test="offlineVerifyResult != null" >
+        offline_verify_result,
+      </if>
+      <if test="offlineVerifyAppendix != null" >
+        offline_verify_appendix,
+      </if>
+      <if test="offlineVerifySdate != null" >
+        offline_verify_sdate,
+      </if>
+      <if test="offlineVerifyEdate != null" >
+        offline_verify_edate,
+      </if>
+      <if test="approver != null" >
+        approver,
+      </if>
+      <if test="approveResult != null" >
+        approve_result,
+      </if>
+      <if test="approveSuggestion != null" >
+        approve_suggestion,
+      </if>
+      <if test="approveDate != null" >
+        approve_date,
+      </if>
+      <if test="bankName != null" >
+        bank_name,
+      </if>
+      <if test="bankUsername != null" >
+        bank_username,
+      </if>
+      <if test="bankNo != null" >
+        bank_no,
+      </if>
+      <if test="bankRemarks != null" >
+        bank_remarks,
+      </if>
+      <if test="grantMoney != null" >
+        grant_money,
+      </if>
+      <if test="grantDate != null" >
+        grant_date,
+      </if>
+      <if test="grantAccountant != null" >
+        grant_accountant,
+      </if>
+      <if test="grantCashier != null" >
+        grant_cashier,
+      </if>
+      <if test="grantRemarks != null" >
+        grant_remarks,
+      </if>
+      <if test="receiptAppendixId != null" >
+        receipt_appendix_id,
+      </if>
+      <if test="receiptDate != null" >
+        receipt_date,
+      </if>
+      <if test="receiptRemarks != null" >
+        receipt_remarks,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="lastStep != null" >
+        #{lastStep,jdbcType=INTEGER},
+      </if>
+      <if test="studentId != null" >
+        #{studentId,jdbcType=INTEGER},
+      </if>
+      <if test="schoolId != null" >
+        #{schoolId,jdbcType=INTEGER},
+      </if>
+      <if test="applyDate != null" >
+        #{applyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="applyAppendixId != null" >
+        #{applyAppendixId,jdbcType=VARCHAR},
+      </if>
+      <if test="applyRemarks != null" >
+        #{applyRemarks,jdbcType=VARCHAR},
+      </if>
+      <if test="checker != null" >
+        #{checker,jdbcType=VARCHAR},
+      </if>
+      <if test="checkResult != null" >
+        #{checkResult,jdbcType=VARCHAR},
+      </if>
+      <if test="checkSdate != null" >
+        #{checkSdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="checkEdate != null" >
+        #{checkEdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="checkAppendixId != null" >
+        #{checkAppendixId,jdbcType=VARCHAR},
+      </if>
+      <if test="offlineVerifier != null" >
+        #{offlineVerifier,jdbcType=VARCHAR},
+      </if>
+      <if test="offlineVerifyResult != null" >
+        #{offlineVerifyResult,jdbcType=VARCHAR},
+      </if>
+      <if test="offlineVerifyAppendix != null" >
+        #{offlineVerifyAppendix,jdbcType=VARCHAR},
+      </if>
+      <if test="offlineVerifySdate != null" >
+        #{offlineVerifySdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="offlineVerifyEdate != null" >
+        #{offlineVerifyEdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="approver != null" >
+        #{approver,jdbcType=VARCHAR},
+      </if>
+      <if test="approveResult != null" >
+        #{approveResult,jdbcType=VARCHAR},
+      </if>
+      <if test="approveSuggestion != null" >
+        #{approveSuggestion,jdbcType=VARCHAR},
+      </if>
+      <if test="approveDate != null" >
+        #{approveDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bankName != null" >
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankUsername != null" >
+        #{bankUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="bankNo != null" >
+        #{bankNo,jdbcType=VARCHAR},
+      </if>
+      <if test="bankRemarks != null" >
+        #{bankRemarks,jdbcType=VARCHAR},
+      </if>
+      <if test="grantMoney != null" >
+        #{grantMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="grantDate != null" >
+        #{grantDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="grantAccountant != null" >
+        #{grantAccountant,jdbcType=VARCHAR},
+      </if>
+      <if test="grantCashier != null" >
+        #{grantCashier,jdbcType=VARCHAR},
+      </if>
+      <if test="grantRemarks != null" >
+        #{grantRemarks,jdbcType=VARCHAR},
+      </if>
+      <if test="receiptAppendixId != null" >
+        #{receiptAppendixId,jdbcType=VARCHAR},
+      </if>
+      <if test="receiptDate != null" >
+        #{receiptDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="receiptRemarks != null" >
+        #{receiptRemarks,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="update" parameterType="cn.jade.rjzxjjh.model.ApplyFlow" >
+    update apply_flow
+    <set >
+      <if test="lastStep != null" >
+        last_step = #{lastStep,jdbcType=INTEGER},
+      </if>
+      <if test="studentId != null" >
+        student_id = #{studentId,jdbcType=INTEGER},
+      </if>
+      <if test="schoolId != null" >
+        school_id = #{schoolId,jdbcType=INTEGER},
+      </if>
+      <if test="applyDate != null" >
+        apply_date = #{applyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="applyAppendixId != null" >
+        apply_appendix_id = #{applyAppendixId,jdbcType=VARCHAR},
+      </if>
+      <if test="applyRemarks != null" >
+        apply_remarks = #{applyRemarks,jdbcType=VARCHAR},
+      </if>
+      <if test="checker != null" >
+        checker = #{checker,jdbcType=VARCHAR},
+      </if>
+      <if test="checkResult != null" >
+        check_result = #{checkResult,jdbcType=VARCHAR},
+      </if>
+      <if test="checkSdate != null" >
+        check_sdate = #{checkSdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="checkEdate != null" >
+        check_edate = #{checkEdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="checkAppendixId != null" >
+        check_appendix_id = #{checkAppendixId,jdbcType=VARCHAR},
+      </if>
+      <if test="offlineVerifier != null" >
+        offline_verifier = #{offlineVerifier,jdbcType=VARCHAR},
+      </if>
+      <if test="offlineVerifyResult != null" >
+        offline_verify_result = #{offlineVerifyResult,jdbcType=VARCHAR},
+      </if>
+      <if test="offlineVerifyAppendix != null" >
+        offline_verify_appendix = #{offlineVerifyAppendix,jdbcType=VARCHAR},
+      </if>
+      <if test="offlineVerifySdate != null" >
+        offline_verify_sdate = #{offlineVerifySdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="offlineVerifyEdate != null" >
+        offline_verify_edate = #{offlineVerifyEdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="approver != null" >
+        approver = #{approver,jdbcType=VARCHAR},
+      </if>
+      <if test="approveResult != null" >
+        approve_result = #{approveResult,jdbcType=VARCHAR},
+      </if>
+      <if test="approveSuggestion != null" >
+        approve_suggestion = #{approveSuggestion,jdbcType=VARCHAR},
+      </if>
+      <if test="approveDate != null" >
+        approve_date = #{approveDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bankName != null" >
+        bank_name = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankUsername != null" >
+        bank_username = #{bankUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="bankNo != null" >
+        bank_no = #{bankNo,jdbcType=VARCHAR},
+      </if>
+      <if test="bankRemarks != null" >
+        bank_remarks = #{bankRemarks,jdbcType=VARCHAR},
+      </if>
+      <if test="grantMoney != null" >
+        grant_money = #{grantMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="grantDate != null" >
+        grant_date = #{grantDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="grantAccountant != null" >
+        grant_accountant = #{grantAccountant,jdbcType=VARCHAR},
+      </if>
+      <if test="grantCashier != null" >
+        grant_cashier = #{grantCashier,jdbcType=VARCHAR},
+      </if>
+      <if test="grantRemarks != null" >
+        grant_remarks = #{grantRemarks,jdbcType=VARCHAR},
+      </if>
+      <if test="receiptAppendixId != null" >
+        receipt_appendix_id = #{receiptAppendixId,jdbcType=VARCHAR},
+      </if>
+      <if test="receiptDate != null" >
+        receipt_date = #{receiptDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="receiptRemarks != null" >
+        receipt_remarks = #{receiptRemarks,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

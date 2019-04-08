@@ -50,4 +50,11 @@ public interface StudentSchoolInfoMapper {
      * @mbggenerated Mon Mar 04 11:56:36 CST 2019
      */
     int updateByPrimaryKey(StudentSchoolInfo record);
+
+    /**
+     * 根据学生ID查询最新学校信息
+     * @param studentSchoolInfo
+     * @return
+     */
+    StudentSchoolInfo selectLataest(StudentSchoolInfo studentSchoolInfo);
 }

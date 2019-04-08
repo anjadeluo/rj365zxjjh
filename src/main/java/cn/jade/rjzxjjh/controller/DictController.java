@@ -6,10 +6,12 @@ import cn.jade.rjzxjjh.service.DictService;
 import cn.jade.rjzxjjh.service.DictService;
 import cn.jade.rjzxjjh.utils.JsonUtils;
 import cn.jade.rjzxjjh.utils.ResponseResult;
+import cn.jade.rjzxjjh.utils.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -85,7 +87,7 @@ public class DictController {
      */
     @RequestMapping(value = "/edit")
     public String edit(Dict dict, Model model, HttpServletRequest request, HttpServletResponse response) {
-        if (dict.getId() != null) {
+        if (dict != null && StringUtils.isNotBlank(dict.getDictIndex()) && StringUtils.isNotBlank(dict.getDictType())) {
             dict = dictService.selectByTypeIndex(dict);
         }
         model.addAttribute("dict", dict);
@@ -94,13 +96,17 @@ public class DictController {
 
     @RequestMapping(value = "/saveDict")
     @ResponseBody
-    public void saveDict(Dict dict, Model model, HttpServletRequest request, HttpServletResponse response) {
+    public void saveDict(@RequestBody Dict dict, Model model, HttpServletRequest request, HttpServletResponse response) {
         ResponseResult result = new ResponseResult();
-        int rec = dictService.saveDict(dict);
-        if (rec > 0) {
+
+        try {
+            dictService.saveDict(dict);
             result.setSuccess(true);
-        } else {
+            result.setMessage("保存成功！");
+        } catch (Exception e) {
+            e.printStackTrace();
             result.setSuccess(false);
+            result.setMessage("保存失败！");
         }
         JsonUtils.writeJson(result, request, response);
     }

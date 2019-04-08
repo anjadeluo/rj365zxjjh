@@ -32,6 +32,16 @@ public class Log {
 
 	private String username;    // 用户名
 
+	private Page<Log> page;
+
+	public Page<Log> getPage() {
+		return page;
+	}
+
+	public void setPage(Page<Log> page) {
+		this.page = page;
+	}
+
 	// 日志类型（1：接入日志；2：错误日志）
 	public static final String TYPE_ACCESS = "1";
 	public static final String TYPE_EXCEPTION = "2";
