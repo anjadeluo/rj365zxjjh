@@ -18,7 +18,7 @@
         <fastjson.version>1.2.29</fastjson.version>
         <commons-lang3.version>3.3.2</commons-lang3.version>
         <poi.version>3.16</poi.version>
-        <solr.version>6.2.1</solr.version>
+        <solr.version>8.4.1</solr.version>
     </properties>
 
     <repositories>
