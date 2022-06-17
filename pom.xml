@@ -15,7 +15,7 @@
         <springsecurity.version>4.2.3.RELEASE</springsecurity.version>
         <mybatis.version>3.2.8</mybatis.version>
         <mybatisspring.version>1.2.4</mybatisspring.version>
-        <fastjson.version>1.2.29</fastjson.version>
+        <fastjson.version>1.2.83</fastjson.version>
         <commons-lang3.version>3.3.2</commons-lang3.version>
         <poi.version>3.16</poi.version>
         <solr.version>6.2.1</solr.version>
